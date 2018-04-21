@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 
 // Recursive calls.
 int bench1a(int i);

@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 
 typedef struct __stdio_file FILE;
 typedef struct __stdio_file

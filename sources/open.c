@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 
 /*
  * it should be possible to call Fopen() on filenames like "PRN:", "CON:" and "AUX", but

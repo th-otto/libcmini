@@ -1,6 +1,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 
 extern int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
 

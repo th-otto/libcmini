@@ -1,7 +1,7 @@
 #include <stddef.h>	/* for size_t */
 #include <stdlib.h>
 #include <string.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 #include "lib.h"
 
 /* CAUTION: use _mallocChunkSize() to tailor to your environment,

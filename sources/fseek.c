@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 #include "lib.h"
 
 extern FILE *__stdio_head;

@@ -1,5 +1,5 @@
 #include <time.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 #ifdef __MINTLIB_COMPATIBLE
 #	include <sys/time.h>
 #endif

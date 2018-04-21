@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 #include "lib.h"
 
 ExitFn *_at_exit = NULL;
