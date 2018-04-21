@@ -3,3 +3,7 @@
 *.d
 *.prg
 *.ttp
+*.acc
+*.tos
+depend
+mapfile
