@@ -67,7 +67,7 @@ STARTUP= \
 	
 CSRCS= $(wildcard $(SRCDIR)/*.c)
 	
-ASRCS= $(wildcard $(SRCDIR)/*.S)
+ASRCS= $(filter-out $(SRCDIR)/startup.S $(SRCDIR)/crt0.S, $(wildcard $(SRCDIR)/*.S))
 
 SRCDIR=sources
 ifeq ($(ONLY_68K),Y)
@@ -101,7 +101,7 @@ LIBIIO=libiiomini.a
 
 LIBS=$(patsubst %,%/$(LIBC),$(LIBDIRS))
 LIBSIIO=$(patsubst %,%/$(LIBIIO),$(LIBDIRS))
-STARTUPS=$(patsubst %,%/$(START_OBJ),$(LIBDIRS))
+STARTUPS=$(START_OBJ) crt0.o
 
 TESTS:= $(shell ls tests | egrep -v '^(CVS)$$')
 
@@ -129,21 +129,21 @@ all:$(patsubst %,%/$(APP),$(TRGTDIRS))
 #
 # multilib flags
 #
-m68020-60/%.a m68020-60/startup.o: CFLAGS += -m68020-60
-mshort/%.a mshort/startup.o: CFLAGS += -mshort
-m68020-60/mshort/%.a m68020-60/mshort/startup.o: CFLAGS += -m68020-60 -mshort
+m68020-60/%.a: CFLAGS += -m68020-60
+mshort/%.a: CFLAGS += -mshort
+m68020-60/mshort/%.a: CFLAGS += -m68020-60 -mshort
 ifeq ($(BUILD_FAST), Y)
-mfastcall/%.a mfastcall/startup.o: CFLAGS +=  -mfastcall
-m68020-60/mfastcall/%.a m68020-60/mfastcall/startup.o: CFLAGS += -m68020-60 -mfastcall
-mshort/mfastcall/%.a mshort/mfastcall/startup.o: CFLAGS += -mshort -mfastcall
-m68020-60/mshort/mfastcall/%.a m68020-60/mshort/mfastcall/startup.o: CFLAGS += -m68020-60 -mshort -mfastcall
+mfastcall/%.a: CFLAGS +=  -mfastcall
+m68020-60/mfastcall/%.a: CFLAGS += -m68020-60 -mfastcall
+mshort/mfastcall/%.a: CFLAGS += -mshort -mfastcall
+m68020-60/mshort/mfastcall/%.a: CFLAGS += -m68020-60 -mshort -mfastcall
 endif
 ifeq ($(BUILD_CF),Y)
-m5475/%.a m5475/startup.o: CFLAGS += -mcpu=5475
-m5475/mshort/%.a m5475/mshort/startup.o: CFLAGS += -mcpu=5475 -mshort
+m5475/%.a: CFLAGS += -mcpu=5475
+m5475/mshort/%.a: CFLAGS += -mcpu=5475 -mshort
 ifeq ($(BUILD_FAST), Y)
-m5475/mfastcall/%.a m5475/mfastcall/startup.o: CFLAGS += -mcpu=5475 -mfastcall
-m5475/mshort/mfastcall/%.a m5475/mshort/mfastcall/startup.o: CFLAGS += -mcpu=5475 -mshort -mfastcall
+m5475/mfastcall/%.a: CFLAGS += -mcpu=5475 -mfastcall
+m5475/mshort/mfastcall/%.a: CFLAGS += -mcpu=5475 -mshort -mfastcall
 endif
 endif
 
@@ -200,7 +200,6 @@ release: all
 	    for i in m5475 m68020-60 mshort m5475/mshort m68020-60/mshort; do \
 		    mkdir -p $$RELEASEDIR/lib/$$i ;\
 	        cp $$i/libcmini.a $$RELEASEDIR/lib/$$i ;\
-	        cp $$i/startup.o $$RELEASEDIR/lib/$$i ;\
 	    done ;\
 	    cp startup.o libcmini.a $$RELEASEDIR/lib ;\
 		chown -R 0:0 $$RELEASEDIR/* ;\
