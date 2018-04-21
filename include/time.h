@@ -2,13 +2,24 @@
 #define _TIME_H_
 
 #include <stdio.h>
+#include <sys/types.h>
 
 #define CLOCKS_PER_SEC 200
 #define CLK_TCK	       200
 
-typedef long time_t;
-typedef long clock_t;
-typedef long suseconds_t;
+#ifndef __time_t_defined
+typedef __time_t time_t;
+#define __time_t_defined 1
+#endif
+#ifndef __clock_t_defined
+typedef __clock_t clock_t;
+#define __clock_t_defined 1
+#endif
+#ifndef __suseconds_t_defined
+typedef __suseconds_t suseconds_t;
+#define __suseconds_t_defined 1
+#endif
+
 
 struct tm 
 {
