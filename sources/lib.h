@@ -8,6 +8,9 @@
 #ifndef LIB_H_
 #define LIB_H_
 
+#include <stdio.h>
+#include <stdarg.h>
+
 /* definitions needed for stack stuff */
 
 #define MINFREE	(8L * 1024L)		/* free at least this much mem on top */
@@ -45,5 +48,7 @@ extern struct mem_chunk _mchunk_free_list;
 
 typedef void (*ExitFn)(void);
 extern char **environ;
+
+int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
 
 #endif /* LIB_H_ */
