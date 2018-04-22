@@ -29,6 +29,10 @@ void _setstack(char *);
 
 typedef void (*ExitFn)(void);
 extern char **environ;
+extern short _app;
+extern unsigned long _PgmSize;
+extern long __libc_argc;
+extern char **__libc_argv;
 
 int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
 

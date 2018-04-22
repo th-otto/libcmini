@@ -19,7 +19,6 @@
 	.globl	__app		| short, defined in crtinit.c
 	.globl	__base		| BASEPAGE *, defined in globals.c
 	.globl	__stksize	| long, defined by user or in stksiz.c
-	.globl	_main		| for references
 
 |
 | externs to pull ident strings of all used libraries into the
@@ -34,7 +33,7 @@
 |
 | Functions defined elsewhere.
 
-	.extern	__crtinit	| void _crtinit(void);
+	.extern	__crtinit_noargs	| void _crtinit(void);
 
 |
 | Assumption: basepage is passed in a0 for accessories; for programs
@@ -58,4 +57,4 @@ __startprg:
 	bclr	#0, d0		| round off
 	movel	d0, sp		| set stack (temporarily)
 	subl	#64, sp		| see note in mintlib/setstack.S
-	jmp	__crtinit	| in crtinit.c
+	jmp	__crtinit_noargs	| in crtinit.c

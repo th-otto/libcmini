@@ -15,7 +15,22 @@
 extern long _stksize;
 extern short _app;
 
-void _main(int, char *[], char *[]);
+extern int main (int, char **, char **);
+
+static void _main (int _argc, char **_argv, char **_envp) {
+	if (_app)
+		(void)Pdomain(1);	/* set MiNT domain */
+		
+	/* if stderr is not re-directed to a file, force 2 to console
+	 * (UNLESS we've been run from a shell we trust, i.e. one that supports
+	 *  the official ARGV scheme, in which case we leave stderr be).
+	 */
+	if(!*_argv[0] && isatty (2))
+		(void) Fforce(2, -1);
+
+	exit(main(_argc, _argv, _envp));
+}
+
 
 void _acc_main(void) {
 	static char *acc_argv[] = { "", NULL }; /* no name and no arguments */
