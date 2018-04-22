@@ -10,7 +10,6 @@
 #include <mint/osbind.h>
 #include "lib.h"
 
-FILE *__stdio_head = 0;
 
 FILE *fopen(const char *path, const char *mode)
 {

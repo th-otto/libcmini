@@ -51,4 +51,6 @@ extern char **environ;
 
 int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
 
+extern FILE *__stdio_head;
+
 #endif /* LIB_H_ */
