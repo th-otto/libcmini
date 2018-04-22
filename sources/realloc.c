@@ -6,6 +6,7 @@
 #endif
 #include <string.h>
 #include "lib.h"
+#include "malloc_int.h"
 
 
 void *realloc (void *r, size_t n)

@@ -5,6 +5,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "malloc_int.h"
+
+#ifdef __GNUC__
+#pragma GCC optimize("-O1")
+#endif
 
 void *calloc(size_t n, size_t sz)
 {
