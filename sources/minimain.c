@@ -37,7 +37,7 @@ static void _main (int _argc, char **_argv, char **_envp) {
 	 * (UNLESS we've been run from a shell we trust, i.e. one that supports
 	 *  the official ARGV scheme, in which case we leave stderr be).
 	 */
-	(void) Fforce(2, -1);
+	/* (void) Fforce(2, -1); */
 
 	exit(main(_argc, _argv, _envp));
 }

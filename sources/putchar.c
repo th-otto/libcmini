@@ -4,6 +4,5 @@
 
 int putchar(int c)
 {
-	(void) Cconout(c);
-	return 1;
+	return fputc(c, stdout);
 }
