@@ -18,7 +18,6 @@
 
 	.globl	__app		| short, defined in crtinit.c
 	.globl	__base		| BASEPAGE *, defined in globals.c
-	.globl	__heapbase	| void *
 	.globl	__stksize	| long, defined by user or in stksiz.c
 	.globl	_main		| for references
 

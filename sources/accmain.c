@@ -13,14 +13,14 @@
 #include "lib.h"
 
 extern long _stksize;
-extern void *_heapbase;
 extern short _app;
 
 void _main(int, char *[], char *[]);
 
 void _acc_main(void) {
 	static char *acc_argv[] = { "", NULL }; /* no name and no arguments */
-
+	void *_heapbase;
+	
 	if (_stksize == 0 || _stksize == -1L)
 		_stksize = MINKEEP;
 
@@ -33,9 +33,7 @@ void _acc_main(void) {
 	/* stack on word boundary */
 	_stksize &= 0xfffffffeL;
 
-	if (_heapbase == 0) {
-		_heapbase = (void *)Malloc(_stksize);
-	}
+	_heapbase = (void *)Malloc(_stksize);
 	_setstack((char *) _heapbase + _stksize);
 
 	/* this is an accessory */
