@@ -121,3 +121,8 @@ __moncontrol:
 ___mcleanup:
 	rts
 #endif /* GCRT0 */
+
+	.data
+	.even
+___has_no_ssystem:
+	.dc.l 1

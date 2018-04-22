@@ -12,7 +12,6 @@
 #include <mintbind.h>
 #include "lib.h"
 
-extern void _monstartup(void *, void *);
 extern int main (int, char **, char **);
 void _main(int, char *[], char *[]);
 void __main();
@@ -27,7 +26,6 @@ extern long _initial_stack;
 void *_heapbase = 0;
 short _app = 1;
 short _split_mem = 0;
-long __has_no_ssystem = 1;
 unsigned long _PgmSize;
 BASEPAGE *_base=0;
 /* BasPag for libcmini compatibility */
@@ -130,7 +128,6 @@ void _crtinit(void) {
 /*	_init_signal(); */
 
 	/* start profiling, if we were linked with gcrt0.o */
-	_monstartup((void *)bp->p_tbase, (void *)((long)etext - 1));
 
 	_main(__libc_argc, __libc_argv, environ);
 	/* not reached normally */
@@ -416,13 +413,10 @@ void _main (int _argc, char **_argv, char **_envp) {
 		(void) Fforce(2, -1);
 
 	stdin = &_StdInF; 				// _StdInF is in .bss and cleared from os
-	bzero(stdin, sizeof(FILE));	// but we cleared out again - safe is safe (paranoia???)
 	FILE_SET_HANDLE(stdin, 0);
 	stdout = &_StdOutF;
-	bzero(stdout, sizeof(FILE));
 	FILE_SET_HANDLE(stdout, 1);
 	stderr = &_StdErrF;
-	bzero(stderr, sizeof(FILE));
 	FILE_SET_HANDLE(stderr, 2);
 
 	exit(main(_argc, _argv, _envp));
