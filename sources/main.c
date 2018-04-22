@@ -375,15 +375,13 @@ bail_out:
 }
 
 
-FILE _StdOutF;
-FILE _StdInF;
-FILE _StdErrF;
-FILE _StdAuxF;
-FILE _StdPrnF;
+static FILE _StdInF = { _IOMAGIC, 0, 0 };
+static FILE _StdOutF = { _IOMAGIC, 1, 0 };
+static FILE _StdErrF = { _IOMAGIC, 2, 0 };
 
-FILE *stdin;
-FILE *stdout;
-FILE *stderr;
+FILE *stdin = &_StdInF;
+FILE *stdout = &_StdOutF;
+FILE *stderr = &_StdErrF;
 
 
 void _main (int _argc, char **_argv, char **_envp) {
@@ -397,13 +395,5 @@ void _main (int _argc, char **_argv, char **_envp) {
 	if(!*_argv[0] && isatty (2))
 		(void) Fforce(2, -1);
 
-	stdin = &_StdInF; 				// _StdInF is in .bss and cleared from os
-	FILE_SET_HANDLE(stdin, 0);
-	stdout = &_StdOutF;
-	FILE_SET_HANDLE(stdout, 1);
-	stderr = &_StdErrF;
-	FILE_SET_HANDLE(stderr, 2);
-
 	exit(main(_argc, _argv, _envp));
 }
-

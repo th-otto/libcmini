@@ -15,8 +15,8 @@
 typedef struct __stdio_file FILE;
 typedef struct __stdio_file
 {
-    int __magic;
-#define	_IOMAGIC ((int) 0xfedabeeb)	/* Magic number to fill `__magic'.  */
+    long __magic;
+#define	_IOMAGIC (0xfedabeebL)	/* Magic number to fill `__magic'.  */
 
 #if 0
     void *BufPtr;     /* next byte write */
@@ -38,15 +38,6 @@ typedef struct __stdio_file
 extern FILE *stdout;
 extern FILE *stdin;
 extern FILE *stderr;
-
-#define stdaux	(&_StdAuxF)
-#define stdprn	(&_StdPrnF)
-
-extern FILE _StdOutF;
-extern FILE _StdInF;
-extern FILE _StdErrF;
-extern FILE _StdAuxF;
-extern FILE _StdPrnF;
 
 #define _IONBF	2
 
@@ -114,4 +105,5 @@ extern int unlink(const char *filename);
 
 static inline int fileno(FILE *stream) { return stream->Handle; }
 static inline int getc(FILE *stream) { return fgetc(stream); }
+
 #endif /* STDIO_H_ */
