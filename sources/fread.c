@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 #include "lib.h"
 
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)

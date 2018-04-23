@@ -1,8 +1,4 @@
 |
-| $Id: crt0.S,v 1.9 2009/06/15 18:44:08 alanh Exp $
-|
-
-|
 | Initialization code; this is common to both 16 and 32 bit libraries,
 | so be careful!
 |
@@ -23,7 +19,6 @@
 	.globl	__app		| short, defined in crtinit.c
 	.globl	__base		| BASEPAGE *, defined in globals.c
 	.globl	__stksize	| long, defined by user or in stksiz.c
-	.globl	___has_no_ssystem	| int, defined in globals.c
 
 |
 | externs to pull ident strings of all used libraries into the
@@ -38,9 +33,7 @@
 |
 | Functions defined elsewhere.
 
-	.extern	__checkcpu	| void _checkcpu(void);
-	.extern	__acc_main	| void _acc_main(void);
-	.extern	__crtinit	| void _crtinit(void);
+	.extern	__crtinit_noargs	| void _crtinit(void);
 
 |
 | Assumption: basepage is passed in a0 for accessories; for programs
@@ -53,16 +46,6 @@
 #endif /* __ELF__ */
 	.globl	__start
 __start:
-	subl	a6, a6		| clear a6 for debuggers
-	cmpl	#0, a0		| test if acc or program
-	beqs	__startprg	| if a program, go elsewhere
-	tstl	a0@(36)		| also test parent basepage pointer
-	bnes	__startprg	| for accs, it must be 0
-	movel	a0, __base	| acc basepage is in A0
-	lea	a0@(252), sp	| use the command line as a temporary stack
-	jbsr	.early_init	| early initialization
-	jsr	__checkcpu	| check for correct CPU or exit
-	jmp	__acc_main	| function is in crtinit.c
 |
 | program startup code: doesn''t actually do much, other than push
 | the basepage onto the stack and call _start1 in crtinit.c
@@ -74,53 +57,4 @@ __startprg:
 	bclr	#0, d0		| round off
 	movel	d0, sp		| set stack (temporarily)
 	subl	#64, sp		| see note in mintlib/setstack.S
-	jbsr	.early_init	| early initialization
-	jsr	__checkcpu	| check for correct CPU or exit
-	jmp	__crtinit	| in crtinit.c
-
-|
-| Initialize global variables required by early initialization code.
-| Warning: The registers are not preserved
-|
-.early_init:
-	clrl	sp@-
-	clrl	sp@-
-	movew	#-1,sp@-	| Check Ssystem() availability
-	movew	#0x154,sp@-	| Ssystem()
-	trap	#1
-	lea	sp@(12),sp
-
-	movel	d0,___has_no_ssystem
-
-	rts
-
-|
-| interfaces for gprof: for crt0.o, does nothing, but for gcrt0.o branches
-| to the appropriate subroutines
-|
-	.globl 	__monstartup
-	.globl	__moncontrol
-	.globl 	___mcleanup
-
-#ifdef GCRT0
-	.extern	_monstartup
-	.extern	_moncontrol
-	.extern	__mcleanup
-
-__monstartup:
-	jmp	_monstartup
-__moncontrol:
-	jmp	_moncontrol
-___mcleanup:
-	jmp	__mcleanup
-#else
-__monstartup:
-__moncontrol:
-___mcleanup:
-	rts
-#endif /* GCRT0 */
-
-	.data
-	.even
-___has_no_ssystem:
-	.dc.l 1
+	jmp	__crtinit_noargs	| in crtinit.c

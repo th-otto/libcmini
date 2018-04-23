@@ -67,8 +67,6 @@
 #define __USE_POSIX199309	1
 #define __USE_POSIX199506	1
 #define __USE_XOPEN2K		1
-#define __USE_ISOC95
-#define __USE_ISOC99		1
 #define __USE_XOPEN	1
 #define __USE_XOPEN_EXTENDED	1
 #define __USE_MISC	1

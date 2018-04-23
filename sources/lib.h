@@ -8,30 +8,14 @@
 #ifndef LIB_H_
 #define LIB_H_
 
+#include <stdio.h>
+#include <stdarg.h>
+
 /* definitions needed for stack stuff */
 
 #define MINFREE	(8L * 1024L)		/* free at least this much mem on top */
 #define MINKEEP (64L * 1024L)		/* keep at least this much mem on stack */
 void _setstack(char *);
-
-/* definitions needed in malloc.c and realloc.c */
-
-struct mem_chunk
-{
-    long valid;
-#define VAL_FREE  0xf4ee0abcL
-#define VAL_ALLOC 0xa11c0abcL
-#define VAL_BORDER 0xb04d0abcL
-
-    struct mem_chunk *next;
-    unsigned long size;
-};
-#define ALLOC_SIZE(ch) (*(long *)((char *)(ch) + sizeof(*(ch))))
-#define BORDER_EXTRA ((sizeof(struct mem_chunk) + sizeof(long) + 7) & ~7)
-
-/* linked list of free blocks */
-extern struct mem_chunk _mchunk_free_list;
-
 
 /* definitions needed in FILE related functions (fopen, fseek etc.) */
 
@@ -45,5 +29,13 @@ extern struct mem_chunk _mchunk_free_list;
 
 typedef void (*ExitFn)(void);
 extern char **environ;
+extern short _app;
+extern unsigned long _PgmSize;
+extern long __libc_argc;
+extern char **__libc_argv;
+
+int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
+
+extern FILE *__stdio_head;
 
 #endif /* LIB_H_ */

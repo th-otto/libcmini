@@ -1,8 +1,9 @@
 #include <stddef.h>	/* for size_t */
 #include <stdlib.h>
 #include <string.h>
-#include <osbind.h>
+#include <mint/osbind.h>
 #include "lib.h"
+#include "malloc_int.h"
 
 /* CAUTION: use _mallocChunkSize() to tailor to your environment,
  *          do not make the default too large, as the compiler
@@ -15,17 +16,14 @@ static size_t MAXHUNK = 32 * 1024L; /* max. default */
 /* tune chunk size */
 void __mallocChunkSize(size_t siz) { MAXHUNK = MINHUNK = siz; }
 
-/* linked list of free blocks struct defined in lib.h */
-struct mem_chunk _mchunk_free_list = { VAL_FREE, NULL, 0L };
-
 
 void *malloc(size_t n)
 {
 	struct mem_chunk *p, *q;
-	unsigned long sz;
+	size_t sz;
 
 	/* add a mem_chunk to required size and round up */
-	n = (n + sizeof(struct mem_chunk) + 7) & ~7;
+	n = (n + sizeof(struct mem_chunk) + (MALLOC_ALIGNMENT - 1)) & ~(MALLOC_ALIGNMENT - 1);
 
 	/* look for first block big enough in free list */
 	p = &_mchunk_free_list;
@@ -39,12 +37,8 @@ void *malloc(size_t n)
 	/* if not enough memory, get more from the system */
 	if (q == NULL)
 	{
+		size_t const page_size = 8192;
 		sz = n + BORDER_EXTRA;
-
-		static int page_size = 0;
-
-		if (!page_size)
-			page_size = 8192;
 
 		sz = (sz + page_size - 1) & -page_size;
 
@@ -56,7 +50,6 @@ void *malloc(size_t n)
 		p = &_mchunk_free_list;
 		while (p->next && q > p->next)
 			p = p->next;
-
 
 		q->size = BORDER_EXTRA;
 		sz -= BORDER_EXTRA;
@@ -92,89 +85,3 @@ void *malloc(size_t n)
 	return (void *) q;
 }
 
-void free(void *param)
-{
-	struct mem_chunk *o, *p, *q, *s;
-	struct mem_chunk *r = (struct mem_chunk *) param;
-
-	/* free(NULL) should do nothing */
-	if (r == NULL)
-		return;
-
-	/* move back to uncover the mem_chunk */
-	r--; /* there it is! */
-
-	if (r->valid != VAL_ALLOC)
-		return;
-
-	r->valid = VAL_FREE;
-
-	/* stick it into free list, preserving ascending address order */
-	o = NULL;
-	p = &_mchunk_free_list;
-	q = _mchunk_free_list.next;
-	while (q && q < r)
-	{
-		o = p;
-		p = q;
-		q = q->next;
-	}
-
-	/* merge after if possible */
-	s = (struct mem_chunk *)(((long) r) + r->size);
-	if (q && s >= q && q->valid != VAL_BORDER)
-	{
-		r->size += q->size;
-		q = q->next;
-		s->size = 0;
-		s->next = NULL;
-	}
-	r->next = q;
-
-	/* merge before if possible, otherwise link it in */
-	s = (struct mem_chunk * )(((long) p) + p->size);
-	if (q && s >= r && p != &_mchunk_free_list)
-	{
-		/* remember: r may be below &_mchunk_free_list in memory */
-		if (p->valid == VAL_BORDER)
-		{
-			if (ALLOC_SIZE(p) == r->size)
-			{
-				o->next = r->next;
-				Mfree (p);
-			}
-			else
-				p->next = r;
-
-			return;
-		}
-
-		p->size += r->size;
-		p->next = r->next;
-		r->size = 0;
-		r->next = NULL;
-
-		s = (struct mem_chunk *)(((long) p) + p->size);
-
-		if (o->valid == VAL_BORDER && ALLOC_SIZE(o) == p->size)
-		{
-			q = &_mchunk_free_list;
-			s = q->next;
-			while (s && s < o)
-			{
-				q = s;
-				s = q->next;
-			}
-			if (s)
-			{
-				q->next = p->next;
-				Mfree (o);
-			}
-		}
-	}
-	else
-    {
-		s = (struct mem_chunk * )(((long) r) + r->size);
-		p->next = r;
-	}
-}

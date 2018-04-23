@@ -1,14 +1,6 @@
-#include <stdarg.h>
 #include <stdlib.h>
-#include <osbind.h>
-
-extern int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
-
-int putchar(int c)
-{
-	(void) Cconout(c);
-	return 1;
-}
+#include <mint/osbind.h>
+#include "lib.h"
 
 int printf(const char *fmt, ...)
 {

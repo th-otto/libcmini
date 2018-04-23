@@ -126,7 +126,7 @@ $(1)/%.o:$(SRCDIR)/%.S
 $(1)_OBJS=$(patsubst %,$(1)/objs/%,$(OBJS))
 $(1)/$(APP): ../../libcmini.a $$($(1)_OBJS)
 	$$(Q)echo "CC $$(@)"
-	$$(Q)$(CC) $$(CFLAGS) -o $$@ ../../$(1)/startup.o $$($(1)_OBJS) -L../../$(1) $(LIBS)
+	$$(Q)$(CC) $$(CFLAGS) -o $$@ ../../startup.o $$($(1)_OBJS) -L../../$(1) $(LIBS)
 endef
 $(foreach DIR,$(TRGTDIRS),$(eval $(call CC_TEMPLATE,$(DIR))))
 

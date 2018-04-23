@@ -10,7 +10,7 @@
 #include <gem.h>
 
 #include "ACCTEST.H"
-#include "ACCTEST.RSH"
+/* #include "ACCTEST.RSH" */
 
 static char acc_name[] = "  libcmini Accessory ";
 extern short _app;
