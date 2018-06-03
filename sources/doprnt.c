@@ -57,16 +57,8 @@ int doprnt(int (*addchar) (int, void *), void *stream, const char *sfmt, va_list
 #endif
 	int i;
 	int fmt;
-	unsigned char pad = ' ';
-	const char *numbers;
-	int flush_left = 0;
-	int f_width = 0;
-	int prec = INF;
-	int hash = 0;
-	int do_long = 0;
-	int sign = 0;
-	int attributes = 0;
 	int num = 0;
+	int attributes = 0;
 
 	f = sfmt;
 	for (; *f; f++)
@@ -77,6 +69,15 @@ int doprnt(int (*addchar) (int, void *), void *stream, const char *sfmt, va_list
 			num += (*addchar) ((int) (((unsigned char) *f) | attributes), stream);
 		} else
 		{
+			unsigned char pad = ' ';
+			const char *numbers;
+			int flush_left = 0;
+			int f_width = 0;
+			int prec = INF;
+			int hash = 0;
+			int do_long = 0;
+			int sign = 0;
+
 			f++;						/* skip the % */
 
 			if (*f == '-')
@@ -85,7 +86,7 @@ int doprnt(int (*addchar) (int, void *), void *stream, const char *sfmt, va_list
 				f++;
 			}
 
-			if (*f == '0' || *f == '.')
+			if (*f == '0')
 			{
 				/* padding with 0 rather than blank */
 				pad = '0';
@@ -214,6 +215,8 @@ int doprnt(int (*addchar) (int, void *), void *stream, const char *sfmt, va_list
 				break;
 
 			case 'f':
+			case 'e':
+			case 'g':
 #ifdef ONLY_INTEGER_IO
 				{
 					const char *p = sfloat;
@@ -375,7 +378,6 @@ int doprnt(int (*addchar) (int, void *), void *stream, const char *sfmt, va_list
 
 			case 'c':
 				i = va_arg(ap, int);
-
 				num += (*addchar) ((int) (i | attributes), stream);
 				break;
 
@@ -405,7 +407,6 @@ int doprnt(int (*addchar) (int, void *), void *stream, const char *sfmt, va_list
 
 			case 'a':
 				attributes = va_arg(ap, int);
-
 				break;
 
 			case '%':
