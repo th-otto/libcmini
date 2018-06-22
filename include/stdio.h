@@ -79,6 +79,7 @@ extern long ftell(FILE *stream);
 
 int setvbuf(FILE *stream, char *buf, int mode, size_t size);
 int fflush(FILE *stream);
+int ferror (FILE *__stream);
 
 
 extern int fputs(const char *s, FILE *stream);
