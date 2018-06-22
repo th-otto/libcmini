@@ -8,13 +8,12 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdarg.h>
-
-extern int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
+#include "lib.h"
 
 struct _mem_stream { char *xstring; char *xestring; };
 #define TO_MEMSP(stream) ((struct _mem_stream *) stream)
 
-int addchar(int c, void *stream)
+int __addchar(int c, void *stream)
 {
 	if (TO_MEMSP(stream)->xestring == TO_MEMSP(stream)->xstring)
 		*TO_MEMSP(stream)->xstring = '\0';
@@ -29,7 +28,7 @@ int vsnprintf(char *str, size_t size, const char *fmt, va_list va)
 	struct _mem_stream stream;
 	stream.xstring = str;
 	stream.xestring = str + size - 1;
-	doprnt(addchar, &stream, fmt, va);
+	doprnt(__addchar, &stream, fmt, va);
 	*stream.xstring++ = '\0';
 
 	return stream.xestring - stream.xstring;

@@ -1,7 +1,5 @@
 #include <time.h>
-#ifdef __MINTLIB_COMPATIBLE
-#	include <sys/time.h>
-#endif
+#include <sys/time.h>
 
 time_t mktime(struct tm *tm)
 {

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <mint/osbind.h>
+#include <sys/types.h>
 #include "lib.h"
 
 /* posix write needed by C++ in libstdc++-v3/libsupc++/pure.cc */

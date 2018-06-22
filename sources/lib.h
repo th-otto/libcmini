@@ -35,6 +35,9 @@ extern long __libc_argc;
 extern char **__libc_argv;
 
 int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
+int __addchar(int c, void *stream);
+int unx2dos(const char *unx, char *dos);
+int dos2unx(const char *dos, char *unx);
 
 extern FILE *__stdio_head;
 

@@ -1,9 +1,6 @@
 #include <stdio.h>
-#include <values.h>
 #include <stdarg.h>
-
-extern int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
-extern int addchar(int c, void *stream);
+#include "lib.h"
 
 struct _mem_stream { char *xstring; char *xestring; };
 
@@ -14,7 +11,7 @@ int vsprintf(char *str, const char *format, va_list va)
 	stream.xstring = str;
 	stream.xestring = 0;
 
-	doprnt(addchar, &stream, format, va);
+	doprnt(__addchar, &stream, format, va);
 	*stream.xstring++ = '\0';
 
 	return stream.xestring - stream.xstring;
