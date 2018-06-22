@@ -77,6 +77,8 @@ extern int fseek(FILE *fp, long offset, int origin);
 extern long ftell(FILE *stream);
 
 
+int setvbuf(FILE *stream, char *buf, int mode, size_t size);
+int fflush(FILE *stream);
 
 
 extern int fputs(const char *s, FILE *stream);
@@ -85,6 +87,7 @@ extern int fputc(int c, FILE *stream);
 extern int putc(int c, FILE *stream);
 
 extern int scanf(const char *format, ...);
+extern int sscanf(const char *ibuf, const char *fmt, ...);
 extern int fscanf(FILE *stream, const char *format, ...);
 extern int fgetc(FILE *stream);
 extern int putchar(int c);
