@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-int (toupper)(int c)
+int (tolower)(int c)
 {
-	return toupper(c);
+	return tolower(c);
 }

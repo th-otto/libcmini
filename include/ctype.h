@@ -8,9 +8,12 @@
 #ifndef _CTYPE_H_
 #define _CTYPE_H_
 
-#define isdigit(c)	(((c) >= '0') && ((c) <= '9'))
-#define isupper(c)	((c) >= 'A' && ((c) <= 'Z'))
-#define islower(c)	((c) >= 'a' && ((c) <= 'z'))
+int toupper(int c);
+int tolower(int c);
+
+#define isdigit(c)	((unsigned char)(c) >= '0' && (unsigned char)(c) <= '9')
+#define isupper(c)	((unsigned char)(c) >= 'A' && (unsigned char)(c) <= 'Z')
+#define islower(c)	((unsigned char)(c) >= 'a' && (unsigned char)(c) <= 'z')
 #define isalpha(c)	(isupper((c)) || islower(c))
 #define tolower(c)	(isupper(c) ? ((c) + 'a' - 'A') : (c))
 #define toupper(c)	(islower(c) ? ((c) - 'a' - 'A') : (c))
