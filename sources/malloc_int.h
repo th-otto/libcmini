@@ -18,3 +18,5 @@ struct mem_chunk
 
 /* linked list of free blocks */
 extern struct mem_chunk _mchunk_free_list;
+
+void __mallocChunkSize(size_t siz);

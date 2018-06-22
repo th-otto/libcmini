@@ -40,6 +40,8 @@ int unx2dos(const char *unx, char *dos);
 int dos2unx(const char *dos, char *unx);
 unsigned long __strtoul_internal(const char *nptr, char **endptr, int base, int *sign);
 unsigned long long __strtoull_internal(const char *nptr, char **endptr, int base, int *sign);
+void _acc_main(void);
+void _crtinit(void);
 
 extern FILE *__stdio_head;
 
