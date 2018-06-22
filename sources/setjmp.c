@@ -1,51 +1,53 @@
-#ifndef _SETJMP_H_
-#define _SETJMP_H_
+#include <setjmp.h>
 
-typedef struct 
-{
-	long retaddr;
-#ifndef __FASTCALL__
-	long regs[11];
-#else
-	long regs[10];
-#endif
-	double fpregs[8];
-} jmp_buf;
+/*
+ * must be compiled with -fomit-frame-pointer,
+ * otherwise we save the fp of the setjmp function
+ * instead of the callers
+ */
 
-int setjmp(jmp_buf *buf)
+#pragma GCC optimize "-fomit-frame-pointer"
+
+int setjmp(jmp_buf buf)
 {
+	register long *a0 asm("%a0") = buf;
 	__asm__ __volatile__(
-#ifndef __FASTCALL__
-		"	movem.l	%%d2-%%d7/%%a2-%%a7,(%[regs])	\n\t"
-#else
-		"	movem.l	%%d3-%%d7/%%a2-%%a7,(%[regs])	\n\t"
+		"	movem.l	%%d2-%%d7/%%a2-%%a7,4(%[regs])	\n\t"
+#ifdef __mcffpu__
+		"	fmovem.d %%fp0-%%fp7,52(%[regs])	\n\t"
+#endif
+#ifdef __HAVE_68881__
+		"	fmovem.x %%fp0-%%fp7,52(%[regs])	\n\t"
 #endif
 		:							/* output */
-		: [regs] "a" (&buf->regs[0])	/* input */
-		: "a0", "memory"
+		: [regs] "a" (a0)	/* input */
+		: "memory"
 	);
+	buf[0] = (long)__builtin_return_address(0);
 	return 0;
 }
 
-void longjmp(jmp_buf *buf, int val)
+void longjmp(jmp_buf buf, int val)
 {
 	register int d0 asm("%d0") = val;
-	register long *a0 asm("%a0") = &buf->regs[0];
+	register long *a0 asm("%a0") = buf;
 	
 	if (val == 0)	/* avoid infinite loop */
 		val = 1;
 
 	__asm__ __volatile__(
-#ifndef __FASTCALL__
-		"	movem.l	(%%a0),%%d2-%%d7/%%a2-%%a7	\n\t"
-#else
-		"	movem.l	(%%a0),%%d3-%%d7/%%a2-%%a7	\n\t"
+		"	movem.l	4(%[a0]),%%d2-%%d7/%%a2-%%a7	\n\t"
+#ifdef __mcffpu__
+		"	fmovem.d 52(%[a0]),%%fp0-%%fp7	\n\t"
 #endif
-		"	rts								\n\t"
+#ifdef __HAVE_68881__
+		"	fmovem.x 52(%[a0]),%%fp0-%%fp7	\n\t"
+#endif
+		"	move.l	(%[a0]),%[a0]	\n\t"
+		"	jmp (%[a0])								\n\t"
 		:							/* output */
-		: "a" (a0), "d" (d0)
+		: [a0]"a"(a0), "d" (d0)
 		: /* not reached; so no need to declare any clobbered regs */
 	);
+	__builtin_unreachable();
 };
-
-#endif /* _SETJMP_H_ */
