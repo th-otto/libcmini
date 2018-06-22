@@ -18,7 +18,6 @@
 
 /* Modified for MiNTLib by Guido Flohr <guido@freemint.de>.  */
 
-#include <errno.h>
 #include <stdio.h>
 #include <string.h>
 
