@@ -6,18 +6,17 @@
  */
 
 #include <string.h>
+#include <sys/types.h>
 
 int strncmp(const char *s1, const char *s2, size_t max)
 {
-	int i;
-	int cmp;
-
-	for (i = 0; i < max && *s1++ && *s2++; i++)
-	{
-		cmp = (*s1 - *s2);
-		if (cmp != 0) return cmp;
-	}
-	return cmp;
+	register ssize_t count = max;
+	register unsigned char c1, c2;
+	
+	do {
+		c1 = (unsigned char) *s1++; c2 = (unsigned char) *s2++;
+	} while (--count >= 0 && c1 && c1 == c2);
+	if (count < 0)
+		return(0);
+	return c1 - c2;
 }
-
-
