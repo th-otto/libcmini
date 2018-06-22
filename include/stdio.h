@@ -17,22 +17,14 @@ typedef struct __stdio_file
 {
     long __magic;
 #define	_IOMAGIC (0xfedabeebL)	/* Magic number to fill `__magic'.  */
+	char *__bufp;			/* Pointer into the buffer.  */
+	char *__get_limit;		/* Reading limit.  */
+	char *__put_limit;		/* Writing limit.  */
 
-#if 0
-    void *BufPtr;     /* next byte write */
-    void *BufLvl;     /* next byte read */
-    void *BufStart;   /* first byte of buffer */
-    void *BufEnd;     /* first byte after buffer */
-#endif
-    long Handle;      /* GEMDOS handle */
-#if 0
-    char Flags;
-    char resv;
-    char ChrBuf;
-    char ungetFlag;
-#endif
-    FILE *__next;     /* Next FILE in the linked list.  */
-
+	char *__buffer;			/* Base of buffer.  */
+	size_t __bufsize;		/* Size of the buffer.  */
+    void *__cookie;			/* Magic cookie. Holds GEMDOS handle */
+    FILE *__next;     		/* Next FILE in the linked list.  */
 } FILE;
 
 extern FILE *stdout;
@@ -107,7 +99,7 @@ extern int open(const char *filename, int access, ...);
 extern int close(int fd);
 extern int unlink(const char *filename);
 
-static inline int fileno(FILE *stream) { return stream->Handle; }
+static inline int fileno(FILE *stream) { return (int)(long)stream->__cookie; }
 static inline int getc(FILE *stream) { return fgetc(stream); }
 
 #endif /* STDIO_H_ */

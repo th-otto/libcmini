@@ -1,10 +1,7 @@
 #include <stdio.h>
+#include "lib.h"
 
-#ifdef __MINTLIB_COMPATIBLE
-int __flshfp(FILE *stream, int c)
-#else
 int putc(int c, FILE *stream)
-#endif
 {
     int ret;
     unsigned char uc;
