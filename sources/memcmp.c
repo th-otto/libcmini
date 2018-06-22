@@ -7,17 +7,23 @@
 
 #include <string.h>
 
-int memcmp(const void *s1, const void *s2, size_t n)
+int memcmp(const void *s1, const void *s2, size_t size)
 {
-	int i;
-	int cmp;
+	register const unsigned char *scan1;
+	register const unsigned char *scan2;
+	register size_t n;
 
-	for (i = 0; i < n; i++)
+	scan1 = (const unsigned char *) s1;
+	scan2 = (const unsigned char *) s2;
+	for (n = size; n > 0; n--)
 	{
-		cmp = (* (unsigned char *) s1++ - * (unsigned char *) s2++);
-		if (cmp != 0) return cmp;
+		if (*scan1 != *scan2)
+			return *scan1 - *scan2;
+		scan1++;
+		scan2++;
 	}
-	return cmp;
+	
+	return 0;
 }
 
 
