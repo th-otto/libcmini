@@ -1,6 +1,5 @@
-#include <sys/ioctl.h>
 #include <mint/mintbind.h>
-#include <mint/errno.h>
+#include <unistd.h>
 
 int isatty (int handle) {
 	long r, pos;
