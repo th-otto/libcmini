@@ -1,11 +1,6 @@
 #include <stdlib.h>
 #include <mint/osbind.h>
-
-#ifdef __MINTLIB_COMPATIBLE
-#	include <sys/stat.h>
-#else
-#	include <ext.h>
-#endif
+#include <sys/stat.h>
 
 int stat(const char *path, struct stat *buff)
 {
