@@ -32,6 +32,9 @@ extern void abort(void);
 #define	RAND_MAX (0x7FFFFFFFL)
 #endif
 
+#define	EXIT_FAILURE	1	/* Failing exit status.  */
+#define	EXIT_SUCCESS	0	/* Successful exit status.  */
+
 extern int rand(void);
 extern long lrand(void);
 extern void srand48(long int seed);
