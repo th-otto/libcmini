@@ -19,19 +19,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-
-// ---------------------------------------------------------------------------------------------------------------------
-// return 1 if character is a digit 0-9
-// ---------------------------------------------------------------------------------------------------------------------
-
-static __inline int isdigit(int num)
-{
-    if (num >= '0' && num <= '9')
-        return 1;
-
-    return 0;
-} // isdigit
-
+#include <ctype.h>
 
 // ---------------------------------------------------------------------------------------------------------------------
 // return 1 if character is a digit 0-9
@@ -86,16 +74,16 @@ static __inline int iswhitespace(const char *p)
 //	raise base by exponent
 // ---------------------------------------------------------------------------------------------------------------------
 
-static __inline int power(int _base, int _exponent)
+static __inline int power(int base, int exponent)
 {
     int i;
-    int pbase = _base;
+    int pbase = base;
 
-    if (_exponent == 0)
+    if (exponent == 0)
         return 1;
 
-    for (i = 1; i < _exponent; ++i)
-        pbase *= _base;
+    for (i = 1; i < exponent; ++i)
+        pbase *= base;
 
     return pbase;
 } // power
