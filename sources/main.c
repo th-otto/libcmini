@@ -13,7 +13,6 @@
 #include "lib.h"
 
 extern int main (int, char **, char **);
-void __main();
 
 static long parseargs(BASEPAGE *bp);
 
