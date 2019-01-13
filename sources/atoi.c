@@ -11,6 +11,9 @@
 int atoi(const char *c)
 {
     int value = 0;
+
+    while (isspace(*c)) c++;
+
     while (isdigit(*c))
     {
         value *= 10;

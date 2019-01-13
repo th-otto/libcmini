@@ -11,6 +11,9 @@
 long atol(const char *c)
 {
     long value = 0;
+
+    while (isspace(*c)) c++;
+    
     while (isdigit(*c))
     {
         value *= 10;
