@@ -199,6 +199,7 @@ none:
 exit_d2:
 	movl	sp@+,d2
 	movl	sp@+,a0
+exit:
 	movl 	a0,d0		| return dest (for memcpy only)
 	rts
 
