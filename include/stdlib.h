@@ -47,5 +47,8 @@ extern unsigned long long strtoull(const char*, char**, int);
 
 #define abs(j)  ((j) > 0 ? (j) : -(j))
 
+#ifndef NULL
 #define NULL	((void *) 0)
+#endif
+
 #endif /* _STDLIB_H_ */
