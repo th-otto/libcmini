@@ -46,7 +46,7 @@ RANLIB=$(PREFIX)ranlib
 BUILD_FAST=$(shell if $(CC) -mfastcall -E - < /dev/null >/dev/null 2>&1; then echo Y; else echo N; fi)
 
 CFLAGS=\
-	   -Wall\
+	   -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror\
 	   -Os \
 	   -fomit-frame-pointer
 
