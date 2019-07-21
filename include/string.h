@@ -52,4 +52,7 @@ extern char *strupr(char *);
 char *basename(const char *filename);
 char *dirname(char *path);
 
+char *strtok(char *s1, const char* s2);
+char *strtok_r(char *s, const char *delim, char **scanpoint);
+
 #endif /* _STRING_H_ */
