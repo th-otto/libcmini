@@ -46,4 +46,6 @@ extern char* strerror_r(int errnum, char *buf, size_t bufsize);
 
 extern char *strrev(char *);
 extern char *strlwr(char *);
+extern char *strupr(char *);
+
 #endif /* _STRING_H_ */
