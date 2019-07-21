@@ -51,4 +51,22 @@ extern unsigned long long strtoull(const char*, char**, int);
 #define NULL	((void *) 0)
 #endif
 
+/* Returned by `div'.  */
+typedef struct {
+	int quot;			/* Quotient.  */
+    int rem;			/* Remainder.  */
+} div_t;
+
+/* Returned by `ldiv'.  */
+#ifndef __ldiv_t_defined
+typedef struct {
+	long int quot;		/* Quotient.  */
+	long int rem;		/* Remainder.  */
+} ldiv_t;
+# define __ldiv_t_defined	1
+#endif
+
+div_t div (int __numer, int __denom) __attribute__ ((__const__));
+ldiv_t ldiv (long int __numer, long int __denom) __attribute__ ((__const__));
+
 #endif /* _STDLIB_H_ */
