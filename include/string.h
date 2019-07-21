@@ -48,4 +48,6 @@ extern char *strrev(char *);
 extern char *strlwr(char *);
 extern char *strupr(char *);
 
+char *basename(const char *filename);
+
 #endif /* _STRING_H_ */

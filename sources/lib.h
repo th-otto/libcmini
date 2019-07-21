@@ -41,4 +41,12 @@ void _crtinit(void);
 
 extern FILE *__stdio_head;
 
+#ifndef NO_CONST
+#  ifdef __GNUC__
+#    define NO_CONST(p) __extension__({ union { const void *cs; void *s; } x; x.cs = p; x.s; })
+#  else
+#    define NO_CONST(p) ((void *)(p))
+#  endif
+#endif
+
 #endif /* LIB_H_ */
