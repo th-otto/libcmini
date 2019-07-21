@@ -4,13 +4,13 @@
 
 int stat(const char *path, struct stat *buff)
 {
-    _DTA dta;
+	_DTA dta;
+    _DTA *old_dta = Fgetdta();
     long ret;
-    const int FA_ATTRIB = (FA_DIR | FA_RDONLY | FA_HIDDEN | FA_SYSTEM);
 
     Fsetdta(&dta);
 
-    ret = Fsfirst(path, FA_ATTRIB);
+    ret = Fsfirst(path, FA_DIR | FA_RDONLY | FA_HIDDEN | FA_SYSTEM);
     if (ret == 0)
     {
         buff->st_dev = 0;
@@ -25,6 +25,9 @@ int stat(const char *path, struct stat *buff)
         buff->st_mtime = dta.dta_time;
         buff->st_ctime = dta.dta_time;
     }
+
+	Fsetdta(old_dta);
+
     return ret;
 }
 
