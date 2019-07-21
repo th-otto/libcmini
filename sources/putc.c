@@ -11,3 +11,4 @@ int putc(int c, FILE *stream)
 
     return (ret < 0 ? ret : uc);
 }
+int fputc(int c, FILE *stream) __attribute__((alias("putc")));
