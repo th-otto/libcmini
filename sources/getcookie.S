@@ -20,14 +20,14 @@
 	.extern	___has_no_ssystem	| int __has_no_ssystem;
 	.extern	_get_sysvar		| long __CDECL get_sysvar(void *var);
 
-	.globl	_getcookie		| getcookie() available to libcflib
-_getcookie:
+	.globl	_Getcookie
+_Getcookie:					| Getcookie() available to libcflib
 #ifndef __FASTCALL__
 	movel	sp@(4),d0		| cookie
 	movel	sp@(8),a0		| p_value
 #endif
-	.globl	_Getcookie
-_Getcookie:
+	.globl	_getcookie
+_getcookie:
 
 	lea	sp@(-16),sp
 	movml	d2/d3/a2/a3,sp@		| ColdFire compatibility
