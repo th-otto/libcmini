@@ -31,6 +31,7 @@ extern char *strpbrk(const char *s, const char *breakat);
 extern char *index(const char *s, int c);
 extern char *strrchr(const char *s, int c);
 extern char *rindex(const char *s, int c);
+extern size_t strnlen(const char* s, size_t maxlen);
 
 extern void bzero(void *s, size_t n);
 extern void bcopy(const void *src, void *dst, size_t n);
