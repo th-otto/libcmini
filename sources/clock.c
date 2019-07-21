@@ -1,7 +1,7 @@
 #include <time.h>
 #include <mint/osbind.h>
 
-#define _hz_200                ((unsigned long *) 0x4baL)
+#define _hz_200                ((volatile unsigned long *) 0x4baL)
 
 clock_t clock(void)
 {
