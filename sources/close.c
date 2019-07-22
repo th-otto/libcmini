@@ -15,5 +15,3 @@ int close(int fd)
     }
     return 0;
 }
-
-
