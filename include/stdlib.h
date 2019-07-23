@@ -71,4 +71,6 @@ typedef struct {
 div_t div (int __numer, int __denom) __attribute__ ((__const__));
 ldiv_t ldiv (long int __numer, long int __denom) __attribute__ ((__const__));
 
+void *bsearch(const void *key, const void *base, size_t num, size_t size, int (*cmp)(const void *, const void *));
+
 #endif /* _STDLIB_H_ */
