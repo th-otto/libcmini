@@ -3,17 +3,15 @@
 
 #define _hz_200                ((volatile unsigned long *) 0x4baL)
 
+
+static long get_clock(void)
+{
+	return *_hz_200;
+}
+
+
 clock_t clock(void)
 {
-	long ssp;
-	clock_t ret;
-
-	ssp = Super(0L);
-
-	ret = *_hz_200;
-
-	Super(ssp);
-
-	return ret;
+	return Supexec(get_clock);
 }
 
