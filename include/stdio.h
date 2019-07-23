@@ -89,6 +89,7 @@ extern int fgetc(FILE *stream);
 extern int putchar(int c);
 extern int fprintf(FILE *stream, const char *format, ...);
 extern int vfprintf(FILE *stream, const char *format, va_list ap);
+int ungetc(int c, FILE *stream);
 
 extern int printf(const char *fmt, ...);
 extern int snprintf(char *s, size_t size, const char *fmt, ...);
