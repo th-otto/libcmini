@@ -41,6 +41,9 @@ void _crtinit(void);
 
 extern FILE *__stdio_head;
 
+#undef __set_errno
+#define __set_errno(e) (errno = (int)(e))
+
 #ifndef NO_CONST
 #  ifdef __GNUC__
 #    define NO_CONST(p) __extension__({ union { const void *cs; void *s; } x; x.cs = p; x.s; })

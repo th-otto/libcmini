@@ -16,15 +16,14 @@ typedef struct __stdio_file FILE;
 typedef struct __stdio_file
 {
     long __magic;
-#define	_IOMAGIC (0xfedabeebL)	/* Magic number to fill `__magic'.  */
-	char *__bufp;			/* Pointer into the buffer.  */
-	char *__get_limit;		/* Reading limit.  */
-	char *__put_limit;		/* Writing limit.  */
+#define	_IOMAGIC (0xfedabeecL)	/* Magic number to fill `__magic'.  */
 
-	char *__buffer;			/* Base of buffer.  */
-	size_t __bufsize;		/* Size of the buffer.  */
     void *__cookie;			/* Magic cookie. Holds GEMDOS handle */
+	unsigned char __pushback;
     FILE *__next;     		/* Next FILE in the linked list.  */
+    unsigned int __pushed_back:1;
+	unsigned int __eof:1;
+	unsigned int __error:1;
 } FILE;
 
 extern FILE *stdout;
