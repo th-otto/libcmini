@@ -6,6 +6,15 @@
 
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
-	long ret = Fwrite(FILE_GET_HANDLE(stream), size * nmemb, ptr);
-	return ret < 0 ? 0 : ret / size;
+	long rc = Fwrite(FILE_GET_HANDLE(stream), size * nmemb, ptr);
+	if (rc < 0)
+	{
+		stream->__error = 1;
+		__set_errno(-rc);
+		rc = 0;
+	} else
+	{
+		rc /= size;;
+	}
+	return rc;
 }
