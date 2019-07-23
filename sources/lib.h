@@ -29,6 +29,8 @@ extern unsigned long _PgmSize;
 extern long __libc_argc;
 extern char **__libc_argv;
 
+struct _mem_stream { char *xstring; char *xestring; };
+
 int __flshfp(FILE *stream, int c);
 int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
 int __addchar(int c, void *stream);

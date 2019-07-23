@@ -2,8 +2,6 @@
 #include <stdarg.h>
 #include "lib.h"
 
-struct _mem_stream { char *xstring; char *xestring; };
-
 int vsprintf(char *str, const char *format, va_list va)
 {
 	struct _mem_stream stream;
