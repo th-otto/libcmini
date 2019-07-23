@@ -12,6 +12,7 @@ int errno;
 
 char **environ;
 long __libc_argc = 1;
+long __has_no_ssystem;
 
 static char *__libc_argv_default[] = { "unknown application", NULL };
 char **__libc_argv = __libc_argv_default;
