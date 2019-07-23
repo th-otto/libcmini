@@ -1,6 +1,5 @@
 #include <string.h>
-
-#define toupper(c) (((c) >= 'a' && (c) <= 'z') ? ((c) - ('a' - 'A')) : (c))
+#include <ctype.h>
 
 int strnicmp(const char *s1, const char *s2, size_t n)
 {
