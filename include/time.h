@@ -49,5 +49,6 @@ struct timezone
 extern time_t time(time_t *tloc);
 extern clock_t clock(void);
 extern time_t mktime(struct tm *tm);
+size_t strftime(char *s, size_t smax, const char *fmt, const struct tm *tp);
 
 #endif /* _TIME_H_ */
