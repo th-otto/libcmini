@@ -73,6 +73,7 @@ FILE *freopen(const char *path, const char *mode, FILE *stream);
 int setvbuf(FILE *stream, char *buf, int mode, size_t size);
 int fflush(FILE *stream);
 int ferror (FILE *__stream);
+int feof (FILE *__stream);
 
 
 extern int fputs(const char *s, FILE *stream);
