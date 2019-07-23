@@ -74,6 +74,7 @@ int setvbuf(FILE *stream, char *buf, int mode, size_t size);
 int fflush(FILE *stream);
 int ferror (FILE *__stream);
 int feof (FILE *__stream);
+void clearerr(FILE *stream);
 
 
 extern int fputs(const char *s, FILE *stream);
