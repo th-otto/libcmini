@@ -9,14 +9,28 @@
 #include <mint/osbind.h>
 #include "lib.h"
 
+
 int fgetc(FILE *stream)
 {
-	char ch;
-
-	if ((Fread(FILE_GET_HANDLE(stream), 1, &ch) == 0L))
+	unsigned char ch;
+	long rc;
+	
+	if (stream->__pushed_back)
 	{
+		stream->__pushed_back = 0;
+		return stream->__pushback;
+	}
+	rc = Fread(FILE_GET_HANDLE(stream), 1, &ch);
+	if (rc == 0)
+	{
+		stream->__eof = 1;
 		return EOF;
 	}
-
-	return (int) ch;
+	if (rc < 0)
+	{
+		__set_errno(-rc);
+		stream->__error = 1;
+		return EOF;
+	}
+	return ch;
 }
