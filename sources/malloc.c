@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mint/osbind.h>
+#include <errno.h>
 #include "lib.h"
 #include "malloc_int.h"
 
@@ -19,69 +20,81 @@ void __mallocChunkSize(size_t siz) { MAXHUNK = MINHUNK = siz; }
 
 void *malloc(size_t n)
 {
-	struct mem_chunk *p, *q;
+	struct mem_chunk *head, *q, *p, *s;
 	size_t sz;
 
 	/* add a mem_chunk to required size and round up */
-	n = (n + sizeof(struct mem_chunk) + (MALLOC_ALIGNMENT - 1)) & ~(MALLOC_ALIGNMENT - 1);
+	n = ALLOC_EXTRA + ((n + MALLOC_ALIGNMENT - 1) & ~(MALLOC_ALIGNMENT - 1));
 
 	/* look for first block big enough in free list */
-	p = &_mchunk_free_list;
-	q = _mchunk_free_list.next;
-	while (q && (q->size < n || q->valid == VAL_BORDER))
-	{
-		p = q;
+	head = &_mchunk_free_list;
+	q = head->next;
+	while (q != head && (q->size < n || q->valid == VAL_SBRK))
 		q = q->next;
-	}
 
 	/* if not enough memory, get more from the system */
-	if (q == NULL)
+	if (q == head)
 	{
 		size_t const page_size = 8192;
-		sz = n + BORDER_EXTRA;
+		if ((n + SBRK_EXTRA) > MINHUNK)
+		{
+			sz = n;
+			sz += SBRK_EXTRA;
+		} else
+		{
+			sz = MINHUNK;
+			if (MINHUNK < MAXHUNK)
+				MINHUNK <<= 1;
+		}
 
 		sz = (sz + page_size - 1) & -page_size;
 
-		q = (struct mem_chunk * ) Malloc(sz);
+		q = (struct mem_chunk *) Malloc(sz);
 		if (q == NULL) /* can't alloc any more? */
+		{
+			errno = ENOMEM;
 			return NULL;
+		}
 
 		/* Note: q may be below the highest allocated chunk */
-		p = &_mchunk_free_list;
-		while (p->next && q > p->next)
+		p = head->next;
+		while (p != head && q > p)
 			p = p->next;
-
-		q->size = BORDER_EXTRA;
-		sz -= BORDER_EXTRA;
-		q->valid = VAL_BORDER;
-		ALLOC_SIZE (q) = sz;
-		q->next = (struct mem_chunk *) ((long) q + BORDER_EXTRA);
-		q->next->next = p->next;
-		p = p->next = q;
-		q = q->next;
-
-		q->size = sz;
-		q->valid = VAL_FREE;
+		
+		q->size = SBRK_EXTRA;
+		sz -= SBRK_EXTRA;
+		q->valid = VAL_SBRK;
+		SBRK_SIZE(q) = sz;
+		q->next = s = (struct mem_chunk *) ((char *) q + SBRK_EXTRA);
+		q->prev = p->prev;
+		q->prev->next = q;
+		q->next->prev = q;
+		
+		s->size = sz;
+		s->valid = VAL_FREE;
+		s->next = p;
+		s->next->prev = s;
+		
+		q = s;
 	}
 
-	if (q->size > n + sizeof(struct mem_chunk))
+	if (q->size > (n + ALLOC_EXTRA))
 	{
 		/* split, leave part of free list */
 		q->size -= n;
-		q = (struct mem_chunk * )(((long) q) + q->size);
+		q = (struct mem_chunk *)(((char *) q) + q->size);
 		q->size = n;
 		q->valid = VAL_ALLOC;
-	}
-	else
+	} else
 	{
 		/* just unlink it */
-		p->next = q->next;
+		q->next->prev = q->prev;
+		q->prev->next = q->next;
 		q->valid = VAL_ALLOC;
 	}
 
-	q->next = NULL;
-	q++; /* hand back ptr to after chunk desc */
+	/* hand back ptr to after chunk desc */
+	s = (struct mem_chunk *)(((char *) q) + ALLOC_EXTRA);
 
-	return (void *) q;
+	return (void *) s;
 }
-

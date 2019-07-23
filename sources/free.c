@@ -16,7 +16,7 @@ struct mem_chunk _mchunk_free_list = { VAL_FREE, NULL, 0L };
 
 void free(void *param)
 {
-	struct mem_chunk *o, *p, *q, *s;
+	struct mem_chunk *head, *next, *prev;
 	struct mem_chunk *r = (struct mem_chunk *) param;
 
 	/* free(NULL) should do nothing */
@@ -24,7 +24,7 @@ void free(void *param)
 		return;
 
 	/* move back to uncover the mem_chunk */
-	r--; /* there it is! */
+	r = (struct mem_chunk *)(((char *) r) - ALLOC_EXTRA);
 
 	if (r->valid != VAL_ALLOC)
 		return;
@@ -32,71 +32,38 @@ void free(void *param)
 	r->valid = VAL_FREE;
 
 	/* stick it into free list, preserving ascending address order */
-	o = NULL;
-	p = &_mchunk_free_list;
-	q = _mchunk_free_list.next;
-	while (q && q < r)
-	{
-		o = p;
-		p = q;
-		q = q->next;
-	}
+	head = &_mchunk_free_list;
+	next = head->next;
+	while (next != head && next < r) 
+		next = next->next;
 
+	r->next = next;
+	r->prev = next->prev;
+	r->prev->next = r;
+	r->next->prev = r;
 	/* merge after if possible */
-	s = (struct mem_chunk *)(((long) r) + r->size);
-	if (q && s >= q && q->valid != VAL_BORDER)
+	if ((struct mem_chunk *)(((char *) r) + r->size) == next && next->valid == VAL_FREE)
 	{
-		r->size += q->size;
-		q = q->next;
-		s->size = 0;
-		s->next = NULL;
+		r->size += next->size;
+		r->next = next->next;
+		next->next->prev = r;
 	}
-	r->next = q;
 
 	/* merge before if possible, otherwise link it in */
-	s = (struct mem_chunk * )(((long) p) + p->size);
-	if (q && s >= r && p != &_mchunk_free_list)
+	prev = r->prev;
+	if (prev != head && prev->valid == VAL_FREE && (struct mem_chunk *)(((char *) (prev) + (prev)->size)) == r)
 	{
-		/* remember: r may be below &_mchunk_free_list in memory */
-		if (p->valid == VAL_BORDER)
-		{
-			if (ALLOC_SIZE(p) == r->size)
-			{
-				o->next = r->next;
-				Mfree (p);
-			}
-			else
-				p->next = r;
-
-			return;
-		}
-
-		p->size += r->size;
-		p->next = r->next;
-		r->size = 0;
-		r->next = NULL;
-
-		s = (struct mem_chunk *)(((long) p) + p->size);
-
-		if (o->valid == VAL_BORDER && ALLOC_SIZE(o) == p->size)
-		{
-			q = &_mchunk_free_list;
-			s = q->next;
-			while (s && s < o)
-			{
-				q = s;
-				s = q->next;
-			}
-			if (s)
-			{
-				q->next = p->next;
-				Mfree (o);
-			}
-		}
+		prev->size += r->size;
+		prev->next = r->next;
+		r->next->prev = prev;
+		r = prev;
 	}
-	else
-    {
-		s = (struct mem_chunk * )(((long) r) + r->size);
-		p->next = r;
+	
+	prev = r->prev;
+	if (prev != head && prev->valid == VAL_SBRK && SBRK_SIZE(prev) == r->size)
+	{
+		prev->prev->next = r->next;
+		r->next->prev = prev->prev;
+		Mfree(prev);
 	}
 }

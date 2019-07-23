@@ -1,20 +1,23 @@
 /* definitions needed in malloc.c and realloc.c */
 
-#define MALLOC_ALIGNMENT 8
-
 struct mem_chunk
 {
-	long valid;
+	unsigned long valid;
 #define VAL_FREE  0xf4ee0abcL
 #define VAL_ALLOC 0xa11c0abcL
-#define VAL_BORDER 0xb04d0abcL
+#define VAL_SBRK  0xb04d0abcUL
 
 	struct mem_chunk *next;
+	struct mem_chunk *prev;
 	unsigned long size;
 	/* unsigned long alloc_size; */
 };
-#define ALLOC_SIZE(ch) (*(unsigned long *)((char *)(ch) + sizeof(*(ch))))
-#define BORDER_EXTRA ((sizeof(struct mem_chunk) + sizeof(long) + (MALLOC_ALIGNMENT - 1)) & ~(MALLOC_ALIGNMENT - 1))
+
+#define MALLOC_ALIGNMENT 4
+#define ALLOC_EXTRA ((sizeof(struct mem_chunk) + MALLOC_ALIGNMENT - 1) & ~(MALLOC_ALIGNMENT - 1))
+
+#define SBRK_EXTRA ((sizeof(struct mem_chunk) + sizeof(size_t) + (MALLOC_ALIGNMENT - 1)) & ~(MALLOC_ALIGNMENT - 1))
+#define SBRK_SIZE(ch) (*(size_t *)((char *)(ch) + sizeof(*(ch))))
 
 /* linked list of free blocks */
 extern struct mem_chunk _mchunk_free_list;
