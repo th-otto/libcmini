@@ -2,5 +2,5 @@
 
 int ferror(FILE *stream)
 {
-	return 0;
+	return stream->__error;
 }
