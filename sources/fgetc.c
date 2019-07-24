@@ -34,3 +34,4 @@ int fgetc(FILE *stream)
 	}
 	return ch;
 }
+int getc(FILE *stream) __attribute__((alias("fgetc")));

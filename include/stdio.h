@@ -107,6 +107,5 @@ int rename(const char *oldname, const char *newname);
 int remove(const char *filename);
 
 static inline int fileno(FILE *stream) { return (int)(long)stream->__cookie; }
-static inline int getc(FILE *stream) { return fgetc(stream); }
 
 #endif /* STDIO_H_ */
