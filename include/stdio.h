@@ -81,6 +81,7 @@ extern int fputs(const char *s, FILE *stream);
 extern int puts(const char *s);
 extern int fputc(int c, FILE *stream);
 extern int putc(int c, FILE *stream);
+void rewind(FILE *stream);
 
 extern int scanf(const char *format, ...);
 extern int sscanf(const char *ibuf, const char *fmt, ...);
