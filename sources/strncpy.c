@@ -9,10 +9,14 @@
 
 char *strncpy(char *dst, const char *src, size_t max)
 {
-	char *ptr = dst;
+	char *dscan;
+	long count;
 
-	while ((*dst++ = *src++) != '\0' && max-- >= 0);
-	return ptr;
+	dscan = dst;
+	count = max;
+	while (--count >= 0 && (*dscan++ = *src++) != '\0')
+		continue;
+	return(dst);
 }
 
 
