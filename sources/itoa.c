@@ -3,7 +3,8 @@
 
 static char const _numstr[] = "0123456789ABCDEF";
 
-char *ltoa(long value, char *buffer, int radix)
+#ifdef __MSHORT__
+char *itoa(int value, char *buffer, int radix)
 {
 	char *p = buffer;
 	int neg = 0;
@@ -22,6 +23,4 @@ char *ltoa(long value, char *buffer, int radix)
 
 	return strrev(buffer);
 }
-#ifndef __MSHORT__
-char *itoa(int vaue, char *buffer, int radix) __attribute__((alias("ltoa")));
 #endif

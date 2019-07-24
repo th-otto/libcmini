@@ -19,8 +19,10 @@ extern void free(void *ptr);
 
 extern char *ltoa(long value, char *buffer, int radix);
 extern char *ultoa(unsigned long value, char *buffer, int radix);
+extern char *itoa(int value, char *buffer, int radix);
 #define _ltoa(a, b, c) ltoa((a), (b), (c))
 #define _ultoa(a, b, c) ultoa((a), (b), (c))
+#define _itoa(a, b, c) itoa((a), (b), (c))
 
 extern char *getenv(const char *name);
 
