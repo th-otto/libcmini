@@ -39,3 +39,6 @@ int atoi(const char *c)
 
     return value;
 }
+#ifndef __MSHORT__
+long atol(const char *c) __attribute__((alias("atoi")));
+#endif

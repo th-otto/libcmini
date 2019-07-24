@@ -8,6 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifdef __MSHORT__
 long atol(const char *c)
 {
     long value = 0;
@@ -39,3 +40,4 @@ long atol(const char *c)
 
     return value;
 }
+#endif
