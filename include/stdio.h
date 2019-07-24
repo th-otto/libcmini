@@ -103,6 +103,8 @@ extern int puts(const char *s);
 extern int open(const char *filename, int access, ...);
 extern int close(int fd);
 extern int unlink(const char *filename);
+int rename(const char *oldname, const char *newname);
+int remove(const char *filename);
 
 static inline int fileno(FILE *stream) { return (int)(long)stream->__cookie; }
 static inline int getc(FILE *stream) { return fgetc(stream); }
