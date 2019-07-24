@@ -10,8 +10,8 @@
 
 int setjmp(jmp_buf buf)
 {
-	register long *a0 asm("%a0") = buf;
-	register void *a1 asm("%a1") = __builtin_return_address(0);
+	register long *a0 __asm__("%a0") = buf;
+	register void *a1 __asm__("%a1") = __builtin_return_address(0);
 	__asm__ __volatile__(
 		"	movem.l	%%d2-%%d7/%%a1-%%a7,(%[regs])	\n\t"
 #ifdef __mcffpu__
@@ -29,8 +29,8 @@ int setjmp(jmp_buf buf)
 
 void longjmp(jmp_buf buf, int val)
 {
-	register int d0 asm("%d0") = val;
-	register long *a0 asm("%a0") = buf;
+	register int d0 __asm__("%d0") = val;
+	register long *a0 __asm__("%a0") = buf;
 	
 	if (d0 == 0)	/* avoid infinite loop */
 		d0 = 1;
