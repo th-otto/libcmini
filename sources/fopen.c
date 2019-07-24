@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mint/osbind.h>
+#include <errno.h>
 #include "lib.h"
 
 
@@ -17,7 +18,10 @@ FILE *fopen(const char *path, const char *mode)
 	long fd;
 	int create=0, append=0, read=0, write=0, i;
 	if (mode == NULL)
-		goto error;
+	{
+		__set_errno(EFAULT);
+		return NULL;
+	}
 
 	switch (*mode) {
 	case 'a':
@@ -30,7 +34,7 @@ FILE *fopen(const char *path, const char *mode)
 		read = 1;
 		break;
 	default:
-		goto error;
+		return NULL;
 	}
 
 	for (i = 1; i < 4; ++i) {
@@ -63,15 +67,20 @@ FILE *fopen(const char *path, const char *mode)
 		if (create) {
 			fd = Fcreate (path, 0);
 			if(fd < 0)
-				goto error;
-			else if(read)
+			{
+				free(fp);
+				__set_errno(-fd);
+				return NULL;
+			}
+			if(read)
 				goto ok;
 			Fclose(fd);
 		}
 		if ((fd = Fopen(path, write ? 1+read : 0)) >= 0)
 			goto ok;
+		__set_errno(-fd);
+		free(fp);
 	}
-error:
 	return NULL;
 ok:
 	fp->__magic = _IOMAGIC;
