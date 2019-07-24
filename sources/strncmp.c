@@ -8,6 +8,10 @@
 #include <string.h>
 #include <sys/types.h>
 
+#if defined(__GNUC__) && __GNUC__ >= 7
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+#endif
+
 int strncmp(const char *scan1, const char *scan2, size_t n)
 {
 	register unsigned char c1, c2;

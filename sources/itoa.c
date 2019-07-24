@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __MSHORT__
 static char const _numstr[] = "0123456789ABCDEF";
 
-#ifdef __MSHORT__
 char *itoa(int value, char *buffer, int radix)
 {
 	char *p = buffer;
