@@ -1,15 +1,4 @@
-# disable verbose builds by default
-# If you want to see all the gory details of the build process,
-# run "VERBOSE=yes make <target>"
-
-ifndef VERBOSE
-  	VERBOSE=no
-endif
-ifneq (yes,$(VERBOSE))
-  	Q=@
-else
-  	Q=
-endif
+include silent.mk
 
 ifneq ($(DEVKITMINT),)
 	export PATH		:=	$(DEVKITMINT)/../devkitMINT/bin:$(PATH)
@@ -115,14 +104,14 @@ dirs::
 startups: $(STARTUPS)
 
 tests:
-	$(Q)echo make tests
-	$(Q)for i in $(TESTS); do if test -e tests/$$i/Makefile ; then $(MAKE) -C tests/$$i || { exit 1;} fi; done;
+	$(AM_V_at)echo make tests
+	$(AM_V_at)for i in $(TESTS); do if test -e tests/$$i/Makefile ; then $(MAKE) -C tests/$$i || { exit 1;} fi; done;
 
 
 clean:
-	$(Q)rm -rf $(LIBS) $(LIBSIIO) $(patsubst %,%/objs/*.o,$(LIBDIRS)) $(patsubst %,%/objs/*.d,$(LIBDIRS)) $(patsubst %,%/objs/iio,$(LIBDIRS)) $(STARTUPS) $(STARTUPS:.o=.d) depend
-	$(Q)for i in $(TESTS); do if test -e tests/$$i/Makefile ; then $(MAKE) -C tests/$$i clean || { exit 1;} fi; done;
-	$(Q) rm -rf libcmini-*
+	$(AM_V_at)rm -rf $(LIBS) $(LIBSIIO) $(patsubst %,%/objs/*.o,$(LIBDIRS)) $(patsubst %,%/objs/*.d,$(LIBDIRS)) $(patsubst %,%/objs/iio,$(LIBDIRS)) $(STARTUPS) $(STARTUPS:.o=.d) depend
+	$(AM_V_at)for i in $(TESTS); do if test -e tests/$$i/Makefile ; then $(MAKE) -C tests/$$i clean || { exit 1;} fi; done;
+	$(AM_V_at)rm -rf libcmini-*
 
 all:$(patsubst %,%/$(APP),$(TRGTDIRS))
 
@@ -152,20 +141,16 @@ endif
 #
 define CC_TEMPLATE
 $(1)/objs/iio/%.o:$(SRCDIR)/iio/%.c
-	$(Q)echo "CC $$(@)"
-	$(Q)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
+	$(AM_V_CC)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
 
 $(1)/objs/%.o:$(SRCDIR)/%.c
-	$(Q)echo "CC $$(@)"
-	$(Q)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
+	$(AM_V_CC)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
 
 $(1)/objs/%.o:$(SRCDIR)/%.S
-	$(Q)echo "CC $$(@)"
-	$(Q)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
+	$(AM_V_AS)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
 
 $(1)/%.o:$(SRCDIR)/%.S
-	$(Q)echo "CC $$(@)"
-	$(Q)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
+	$(AM_V_AS)$(CC) -MMD -MP -MF $$(@:.o=.d) $$(CFLAGS) $(INCLUDE) -c $$< -o $$@
 endef
 $(foreach DIR,$(LIBDIRS),$(eval $(call CC_TEMPLATE,$(DIR))))
 
@@ -175,18 +160,16 @@ $(foreach DIR,$(LIBDIRS),$(eval $(call CC_TEMPLATE,$(DIR))))
 define ARC_TEMPLATE
 $(1)_OBJS=$(patsubst %,$(1)/objs/%,$(OBJS))
 $(1)/$(LIBC): $$($(1)_OBJS)
-	$(Q)echo "AR $$@"
-	$(Q)$(AR) cr $$@ $$?
-	$(Q)$(RANLIB) $$@
+	$(AM_V_AR)$(AR) cr $$@ $$?
+	$(AM_V_at)$(RANLIB) $$@
 LIBDEPEND+=$$($1_OBJS)
 LIBSE+=$(1)/$(LIBC)
 
 $(shell mkdir -p $(1)/objs/iio)
 $(1)_IIO_OBJS=$(patsubst %,$(1)/objs/iio/%,$(IIO_OBJS))
 $(1)/$(LIBIIO): $$($(1)_IIO_OBJS)
-	$(Q)echo "AR $$@"
-	$(Q)$(AR) cr $$@ $$?
-	$(Q)$(RANLIB) $$@
+	$(AM_V_AR)$(AR) cr $$@ $$?
+	$(AM_V_at)$(RANLIB) $$@
 endef
 $(foreach DIR,$(LIBDIRS),$(eval $(call ARC_TEMPLATE,$(DIR))))
 
