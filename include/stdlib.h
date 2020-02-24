@@ -26,6 +26,19 @@ extern char *itoa(int value, char *buffer, int radix);
 
 extern char *getenv(const char *name);
 
+#ifndef __COMPAR_FN_T
+# define __COMPAR_FN_T
+typedef int (*__compar_fn_t) (__const void*, __const void*);
+
+# ifdef	__USE_GNU
+typedef __compar_fn_t comparison_fn_t;
+# endif
+#endif
+
+extern void qsort (void* __base, size_t __total_elems, 
+                             size_t __size, 
+                             __compar_fn_t __compar);
+
 int atexit(void (*func)(void));
 extern void exit(int status);
 extern void abort(void);
