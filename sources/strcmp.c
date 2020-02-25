@@ -13,7 +13,7 @@
 
 int strcmp(const char *scan1, const char *scan2)
 {
-	register unsigned char c1, c2;
+	unsigned char c1, c2;
 
 	if (!scan1)
 		return scan2 ? -1 : 0;
@@ -29,13 +29,10 @@ int strcmp(const char *scan1, const char *scan2)
 	 * high against the end-of-string NUL.
 	 */
 	if (c1 == c2)
-		return(0);
-	else if (c1 == '\0')
-		return(-1);
-	else if (c2 == '\0')
-		return(1);
-	else
-		return(c1 - c2);
+		return 0;
+	if (c1 == '\0')
+		return -1;
+	if (c2 == '\0')
+		return 1;
+	return c1 - c2;
 }
-
-

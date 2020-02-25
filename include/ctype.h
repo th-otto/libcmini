@@ -10,6 +10,10 @@
 
 int toupper(int c);
 int tolower(int c);
+int isupper(int c);
+int islower(int c);
+int isspace(int c);
+int isdigit(int c);
 
 #define isdigit(c)	((unsigned char)(c) >= '0' && (unsigned char)(c) <= '9')
 #define isupper(c)	((unsigned char)(c) >= 'A' && (unsigned char)(c) <= 'Z')

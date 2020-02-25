@@ -195,7 +195,7 @@ void qsort(void *base, size_t nel, size_t width, int (*compar)(const void *, con
 		char *const end_ptr = &base_ptr[width * (nel - 1)];
 		char *tmp_ptr = base_ptr;
 		char *thresh = min(end_ptr, base_ptr + max_thresh);
-		register char *run_ptr;
+		char *run_ptr;
 
 		/* Find smallest element in first threshold and place it at the
 		   array's beginning.  This is the smallest array element,

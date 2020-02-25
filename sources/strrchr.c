@@ -12,5 +12,3 @@ char *strrchr(const char *s, int c)
 
 	return NULL;
 }
-
-char *rindex(const char *s, int c) __attribute__((alias("strrchr")));

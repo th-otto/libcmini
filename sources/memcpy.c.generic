@@ -12,8 +12,8 @@
 
 void *memcpy(void *dest, const void *src, size_t n)
 {
-	register char *dp = dest;
-	register const char *sp = src;
+	char *dp = (char *)dest;
+	const char *sp = (const char *)src;
 
 	while (n--)
 		*dp++ = *sp++;

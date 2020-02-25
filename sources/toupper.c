@@ -1,7 +1,6 @@
-#include <stdio.h>
 #include <ctype.h>
 
 int (toupper)(int c)
 {
-	return toupper(c);
+	return islower(c) ? ((c) - 'a' - 'A') : (c);
 }

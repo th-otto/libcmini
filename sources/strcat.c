@@ -18,4 +18,3 @@ char *strcat(char *dst, const char *src)
 
 	return ret;
 }
-

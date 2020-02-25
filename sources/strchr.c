@@ -1,5 +1,12 @@
-#include "lib.h"
 #include <string.h>
+
+#ifndef NO_CONST
+#  ifdef __GNUC__
+#    define NO_CONST(p) __extension__({ union { const void *cs; void *s; } x; x.cs = p; x.s; })
+#  else
+#    define NO_CONST(p) ((void *)(p))
+#  endif
+#endif
 
 char *strchr(const char *str, int charwanted)
 {
@@ -14,5 +21,3 @@ char *strchr(const char *str, int charwanted)
 
 	return NULL;
 }
-
-char *index(const char *str, int c) __attribute__((alias("strchr")));
