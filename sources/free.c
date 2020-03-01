@@ -11,7 +11,7 @@
 #include "malloc_int.h"
 
 /* linked list of free blocks struct defined in lib.h */
-struct mem_chunk _mchunk_free_list = { VAL_FREE, NULL, 0L };
+struct mem_chunk _mchunk_free_list = { VAL_FREE, &_mchunk_free_list, &_mchunk_free_list, 0 };
 
 
 void free(void *param)
@@ -19,6 +19,9 @@ void free(void *param)
 	struct mem_chunk *head, *next, *prev;
 	struct mem_chunk *r = (struct mem_chunk *) param;
 
+#if MALLOC_DEBUG
+	nf_debugprintf("free 0x%08lx\n", (unsigned long)r);
+#endif
 	/* free(NULL) should do nothing */
 	if (r == NULL)
 		return;

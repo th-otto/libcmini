@@ -29,7 +29,7 @@ void *realloc(void *r, size_t n)
 
 	if (p->valid != VAL_ALLOC)
 	{
-		errno = EINVAL;
+		__set_errno(EINVAL);
 		return NULL;
 	}
 

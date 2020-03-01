@@ -1,5 +1,10 @@
 /* definitions needed in malloc.c and realloc.c */
 
+#define MALLOC_DEBUG 0
+#if MALLOC_DEBUG
+#include <mint/arch/nf_ops.h>
+#endif
+
 struct mem_chunk
 {
 	unsigned long valid;

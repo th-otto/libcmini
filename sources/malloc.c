@@ -23,6 +23,9 @@ void *malloc(size_t n)
 	struct mem_chunk *head, *q, *p, *s;
 	size_t sz;
 
+#if MALLOC_DEBUG
+	nf_debugprintf("malloc %lu -> ", n);
+#endif
 	/* add a mem_chunk to required size and round up */
 	n = ALLOC_EXTRA + ((n + MALLOC_ALIGNMENT - 1) & ~(MALLOC_ALIGNMENT - 1));
 
@@ -53,6 +56,9 @@ void *malloc(size_t n)
 		if (q == NULL) /* can't alloc any more? */
 		{
 			errno = ENOMEM;
+#if MALLOC_DEBUG
+			nf_debugprintf("NULL\n");
+#endif
 			return NULL;
 		}
 
@@ -96,5 +102,8 @@ void *malloc(size_t n)
 	/* hand back ptr to after chunk desc */
 	s = (struct mem_chunk *)(((char *) q) + ALLOC_EXTRA);
 
+#if MALLOC_DEBUG
+	nf_debugprintf("0x%08lx\n", (unsigned long)s);
+#endif
 	return (void *) s;
 }
