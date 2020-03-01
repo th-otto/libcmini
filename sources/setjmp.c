@@ -6,6 +6,7 @@
  * instead of the callers
  */
 
+#ifdef __GNUC__
 #pragma GCC optimize "-fomit-frame-pointer"
 
 int setjmp(jmp_buf buf)
@@ -13,12 +14,12 @@ int setjmp(jmp_buf buf)
 	register long *a0 __asm__("%a0") = buf;
 	register void *a1 __asm__("%a1") = __builtin_return_address(0);
 	__asm__ __volatile__(
-		"	movem.l	%%d2-%%d7/%%a1-%%a7,(%[regs])	\n\t"
+		"\tmovem.l	%%d2-%%d7/%%a1-%%a7,(%[regs])\n"
 #ifdef __mcffpu__
-		"	fmovem%.d %%fp0-%%fp7,52(%[regs])	\n\t"
+		"\tfmovem%.d %%fp0-%%fp7,52(%[regs])\n"
 #endif
 #ifdef __HAVE_68881__
-		"	fmovem%.x %%fp0-%%fp7,52(%[regs])	\n\t"
+		"\tfmovem%.x %%fp0-%%fp7,52(%[regs])\n"
 #endif
 		:							/* output */
 		: [regs] "a" (a0), "a"(a1)	/* input */
@@ -32,21 +33,20 @@ void longjmp(jmp_buf buf, int val)
 	register int d0 __asm__("%d0") = val;
 	register long *a0 __asm__("%a0") = buf;
 	
-	if (d0 == 0)	/* avoid infinite loop */
-		d0 = 1;
-
 	__asm__ __volatile__(
-		"	movem.l	(%[a0]),%%d2-%%d7/%%a1-%%a7	\n\t"
+		"\tmovem.l	(%[a0]),%%d2-%%d7/%%a1-%%a7\n"
 #ifdef __mcffpu__
-		"	fmovem%.d 52(%[a0]),%%fp0-%%fp7	\n\t"
+		"\tfmovem%.d 52(%[a0]),%%fp0-%%fp7\n"
 #endif
 #ifdef __HAVE_68881__
-		"	fmovem%.x 52(%[a0]),%%fp0-%%fp7	\n\t"
+		"\tfmovem%.x 52(%[a0]),%%fp0-%%fp7\n"
 #endif
-		"	jmp (%%a1)								\n\t"
+		"\taddq.l #4,%%a7\n"		/* pop return pc of setjmp() call */
+		"\tjmp (%%a1)\n"
 		:							/* output */
 		: [a0]"a"(a0), "d" (d0)
 		: /* not reached; so no need to declare any clobbered regs */
 	);
 	__builtin_unreachable();
 }
+#endif
