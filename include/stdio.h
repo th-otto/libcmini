@@ -34,7 +34,7 @@ extern FILE *stderr;
 
 #ifndef NULL
 #define NULL        ((void *)0)
-#endif /* NULL */
+#endif
 
 #define OPEN_MAX        32
 #define FOPEN_MAX       32

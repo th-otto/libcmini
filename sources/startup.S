@@ -23,7 +23,6 @@
 	.globl	__app		| short, defined in crtinit.c
 	.globl	__base		| BASEPAGE *, defined in globals.c
 	.globl	__stksize	| long, defined by user or in stksiz.c
-	.globl	___has_no_ssystem	| long, defined in globals.c
 
 |
 | externs to pull ident strings of all used libraries into the
@@ -60,8 +59,6 @@ __start:
 	bnes	__startprg	| for accs, it must be 0
 	movel	a0, __base	| acc basepage is in A0
 	lea	a0@(252), sp	| use the command line as a temporary stack
-	jbsr	.early_init	| early initialization
-	jsr	__checkcpu	| check for correct CPU or exit
 	jmp	__acc_main	| function is in crtinit.c
 |
 | program startup code: doesn''t actually do much, other than push
@@ -74,25 +71,7 @@ __startprg:
 	bclr	#0, d0		| round off
 	movel	d0, sp		| set stack (temporarily)
 	subl	#64, sp		| see note in mintlib/setstack.S
-	jbsr	.early_init	| early initialization
-	jsr	__checkcpu	| check for correct CPU or exit
 	jmp	__crtinit	| in crtinit.c
-
-|
-| Initialize global variables required by early initialization code.
-| Warning: The registers are not preserved
-|
-.early_init:
-	clrl	sp@-
-	clrl	sp@-
-	movew	#-1,sp@-	| Check Ssystem() availability
-	movew	#0x154,sp@-	| Ssystem()
-	trap	#1
-	lea	sp@(12),sp
-
-	movel	d0,___has_no_ssystem
-
-	rts
 
 |
 | interfaces for gprof: for crt0.o, does nothing, but for gcrt0.o branches

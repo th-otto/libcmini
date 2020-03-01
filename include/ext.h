@@ -93,14 +93,14 @@ struct dfree
 
 size_t      malloc_size(const void *ptr);
 
-extern int getcurdir(int drive, char *path);
-extern char *getcwd(char *buffer, int bufflen);
-extern int getdisk(void);
-extern void getdfree(unsigned char drive, struct dfree *dtable);
-extern int setdisk(int drive);
+int getcurdir(int drive, char *path);
+char *getcwd(char *buffer, int bufflen);
+int getdisk(void);
+void getdfree(unsigned char drive, struct dfree *dtable);
+int setdisk(int drive);
 
-extern int findfirst(const char *filename, struct ffblk *ffblk, int attrib);
-extern int findnext(struct ffblk *ffblk);
+int findfirst(const char *filename, struct ffblk *ffblk, int attrib);
+int findnext(struct ffblk *ffblk);
 
 /* void        getdate( struct date *dateRec ); */
 void        gettime( struct time *timeRec );

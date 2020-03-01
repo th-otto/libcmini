@@ -10,21 +10,21 @@
 
 typedef unsigned long size_t;
 
-extern int atoi(const char *c);
-extern long atol(const char *c);
-extern void *malloc(size_t size);
-extern void *calloc(size_t nmemb, size_t size);
-extern void *realloc(void *ptr, size_t size);
-extern void free(void *ptr);
+int atoi(const char *c);
+long atol(const char *c);
+void *malloc(size_t size);
+void *calloc(size_t nmemb, size_t size);
+void *realloc(void *ptr, size_t size);
+void free(void *ptr);
 
-extern char *ltoa(long value, char *buffer, int radix);
-extern char *ultoa(unsigned long value, char *buffer, int radix);
-extern char *itoa(int value, char *buffer, int radix);
+char *ltoa(long value, char *buffer, int radix);
+char *ultoa(unsigned long value, char *buffer, int radix);
+char *itoa(int value, char *buffer, int radix);
 #define _ltoa(a, b, c) ltoa((a), (b), (c))
 #define _ultoa(a, b, c) ultoa((a), (b), (c))
 #define _itoa(a, b, c) itoa((a), (b), (c))
 
-extern char *getenv(const char *name);
+char *getenv(const char *name);
 
 #ifndef __COMPAR_FN_T
 # define __COMPAR_FN_T
@@ -35,13 +35,13 @@ typedef __compar_fn_t comparison_fn_t;
 # endif
 #endif
 
-extern void qsort (void* __base, size_t __total_elems, 
+void qsort (void* __base, size_t __total_elems, 
                              size_t __size, 
                              __compar_fn_t __compar);
 
 int atexit(void (*func)(void));
-extern void exit(int status);
-extern void abort(void);
+void exit(int status);
+void abort(void);
 
 #ifdef __MSHORT__
 #define	RAND_MAX (0x7FFF)
@@ -52,15 +52,15 @@ extern void abort(void);
 #define	EXIT_FAILURE	1	/* Failing exit status.  */
 #define	EXIT_SUCCESS	0	/* Successful exit status.  */
 
-extern void srand (unsigned int __seed);
-extern int rand(void);
-extern long lrand(void);
-extern void srand48(long int seed);
+void srand (unsigned int __seed);
+int rand(void);
+long lrand(void);
+void srand48(long int seed);
 
-extern long strtol(const char*, char**, int);
-extern unsigned long strtoul(const char*, char**, int);
-extern long long strtoll(const char*, char**, int);
-extern unsigned long long strtoull(const char*, char**, int);
+long strtol(const char*, char**, int);
+unsigned long strtoul(const char*, char**, int);
+long long strtoll(const char*, char**, int);
+unsigned long long strtoull(const char*, char**, int);
 
 #define abs(j)  ((j) > 0 ? (j) : -(j))
 
