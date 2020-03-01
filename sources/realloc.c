@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "lib.h"
-#include "malloc_int.h"
+#include "mallint.h"
 
 
 void *realloc(void *r, size_t n)
@@ -29,7 +28,7 @@ void *realloc(void *r, size_t n)
 
 	if (p->valid != VAL_ALLOC)
 	{
-		__set_errno(EINVAL);
+		errno = EINVAL;
 		return NULL;
 	}
 

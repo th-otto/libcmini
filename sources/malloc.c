@@ -3,8 +3,7 @@
 #include <string.h>
 #include <mint/osbind.h>
 #include <errno.h>
-#include "lib.h"
-#include "malloc_int.h"
+#include "mallint.h"
 
 /* CAUTION: use _mallocChunkSize() to tailor to your environment,
  *          do not make the default too large, as the compiler

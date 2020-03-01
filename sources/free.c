@@ -7,8 +7,7 @@
 
 #include <stdlib.h>
 #include <mint/osbind.h>
-#include "lib.h"
-#include "malloc_int.h"
+#include "mallint.h"
 
 /* linked list of free blocks struct defined in lib.h */
 struct mem_chunk _mchunk_free_list = { VAL_FREE, &_mchunk_free_list, &_mchunk_free_list, 0 };

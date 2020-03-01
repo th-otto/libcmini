@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "malloc_int.h"
+#include "mallint.h"
 
 #ifdef __GNUC__
 #pragma GCC optimize("-O1")
