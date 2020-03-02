@@ -23,3 +23,7 @@ void *memmove(void *dest, const void *src, size_t n)
 	}
 	return dest;
 }
+
+#ifdef __GNUC__
+void *memcpy(void *dest, const void *src, size_t n) __attribute__((alias("memmove")));
+#endif

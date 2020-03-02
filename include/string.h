@@ -34,7 +34,6 @@ char *rindex(const char *s, int c);
 size_t strnlen(const char* s, size_t maxlen);
 
 void bzero(void *s, size_t n);
-void bcopy(const void *src, void *dst, size_t n);
 void *memset(void *b, int c, size_t len);
 void *memcpy(void *dest, const void *src, size_t n);
 void *memmove(void *dest, const void *src, size_t n);
