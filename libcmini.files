@@ -41,7 +41,7 @@ sources/ltoa.c
 sources/main.c
 sources/malloc.c
 sources/memcmp.c
-sources/memmove.c
+sources/memcpy.c
 sources/memset.c
 sources/mktime.c
 sources/printf.c

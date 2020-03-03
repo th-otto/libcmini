@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void *memmove(void *dest, const void *src, size_t n)
+void *memcpy(void *dest, const void *src, size_t n)
 {
 	unsigned char *pd = (unsigned char *)dest;
 	const unsigned char *ps = (const unsigned char *)src;
@@ -25,5 +25,5 @@ void *memmove(void *dest, const void *src, size_t n)
 }
 
 #ifdef __GNUC__
-void *memcpy(void *dest, const void *src, size_t n) __attribute__((alias("memmove")));
+void *memmove(void *dest, const void *src, size_t n) __attribute__((alias("memcpy")));
 #endif
