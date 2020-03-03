@@ -113,13 +113,11 @@ void _crtinit(void) {
 	/* start profiling, if we were linked with gcrt0.o */
 
 	_main(__libc_argc, __libc_argv, environ);
-	/* not reached normally */
+	__builtin_unreachable();
 
 notenough:
-	(void) Cconws("Fatal error: insufficient memory\r\n");
-	(void) Cconws("Hint: either decrease stack size using 'stack' command (not recomended)\r\n" \
-		   "      or increase TPA_INITIALMEM value in mint.cnf.\r\n");
 	Pterm(-1);
+	__builtin_unreachable();
 }
 
 /*
