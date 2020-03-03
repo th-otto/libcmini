@@ -52,11 +52,11 @@ endif
 
 
 STARTUP= \
-	$(SRCDIR)/startup.S
+	$(SRCDIR)/crt0.S
 	
 CSRCS= $(wildcard $(SRCDIR)/*.c)
 	
-ASRCS= $(filter-out $(SRCDIR)/startup.S $(SRCDIR)/crt0.S, $(wildcard $(SRCDIR)/*.S))
+ASRCS= $(filter-out $(SRCDIR)/crt0.S $(SRCDIR)/minicrt0.S, $(wildcard $(SRCDIR)/*.S))
 
 SRCDIR=sources
 ifeq ($(ONLY_68K),Y)
@@ -84,13 +84,13 @@ OBJS=$(COBJS) $(AOBJS)
 
 IIO_OBJS = doprnt.o $(filter %printf.o, $(patsubst %,../%,$(OBJS)))
 
-START_OBJ=startup.o
+START_OBJ=crt0.o
 LIBC=libcmini.a
 LIBIIO=libiiomini.a
 
 LIBS=$(patsubst %,%/$(LIBC),$(LIBDIRS))
 LIBSIIO=$(patsubst %,%/$(LIBIIO),$(LIBDIRS))
-STARTUPS=$(START_OBJ) crt0.o
+STARTUPS=$(START_OBJ) minicrt0.o
 
 TESTS:= $(shell ls tests | egrep -v '^(CVS)$$')
 
@@ -184,7 +184,7 @@ release: all
 		    mkdir -p $$RELEASEDIR/lib/$$i ;\
 	        cp $$i/libcmini.a $$RELEASEDIR/lib/$$i ;\
 	    done ;\
-	    cp startup.o libcmini.a $$RELEASEDIR/lib ;\
+	    cp crt0.o libcmini.a $$RELEASEDIR/lib ;\
 		chown -R 0:0 $$RELEASEDIR/* ;\
 		tar -C $$RELEASEDIR -cvzf $$RELEASEDIR.tar.gz . ;\
 	    chmod 644 $$RELEASEDIR.tar.gz ;\
@@ -203,7 +203,7 @@ install::
 		mkdir -p $(DESTDIR)/usr/lib/$$i; \
 		cp -a $$i/$(LIBC) $$i/$(LIBIIO) $(DESTDIR)/usr/lib/$$i; \
 	done
-	cp -a startup.o $(DESTDIR)/usr/lib
+	cp -a $(STARTUPS) $(DESTDIR)/usr/lib
 
 ifneq (clean,$(MAKECMDGOALS))
 -include $(DEPENDS)

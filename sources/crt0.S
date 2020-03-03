@@ -16,7 +16,6 @@
 | .extern in order to ensure they will be linked into the executable
 | even if they are not used in this file.
 
-	.globl	__app		| short, defined in crtinit.c
 	.globl	__base		| BASEPAGE *, defined in globals.c
 	.globl	__stksize	| long, defined by user or in stksiz.c
 
@@ -33,7 +32,8 @@
 |
 | Functions defined elsewhere.
 
-	.extern	__crtinit_noargs	| void _crtinit(void);
+	.extern	__acc_main	| void _acc_main(void);
+	.extern	__crtinit	| void _crtinit(void);
 
 |
 | Assumption: basepage is passed in a0 for accessories; for programs
@@ -46,6 +46,14 @@
 #endif /* __ELF__ */
 	.globl	__start
 __start:
+	subl	a6, a6		| clear a6 for debuggers
+	cmpl	#0, a0		| test if acc or program
+	beqs	__startprg	| if a program, go elsewhere
+	tstl	a0@(36)		| also test parent basepage pointer
+	bnes	__startprg	| for accs, it must be 0
+	movel	a0, __base	| acc basepage is in A0
+	lea	a0@(252), sp	| use the command line as a temporary stack
+	jmp	__acc_main	| function is in accmain.c
 |
 | program startup code: doesn''t actually do much, other than push
 | the basepage onto the stack and call _start1 in crtinit.c
@@ -57,4 +65,30 @@ __startprg:
 	bclr	#0, d0		| round off
 	movel	d0, sp		| set stack (temporarily)
 	subl	#64, sp		| see note in mintlib/setstack.S
-	jmp	__crtinit_noargs	| in crtinit.c
+	jmp	__crtinit	| in main.c
+
+|
+| interfaces for gprof: for crt0.o, does nothing, but for gcrt0.o branches
+| to the appropriate subroutines
+|
+	.globl 	__monstartup
+	.globl	__moncontrol
+	.globl 	___mcleanup
+
+#ifdef GCRT0
+	.extern	_monstartup
+	.extern	_moncontrol
+	.extern	__mcleanup
+
+__monstartup:
+	jmp	_monstartup
+__moncontrol:
+	jmp	_moncontrol
+___mcleanup:
+	jmp	__mcleanup
+#else
+__monstartup:
+__moncontrol:
+___mcleanup:
+	rts
+#endif /* GCRT0 */

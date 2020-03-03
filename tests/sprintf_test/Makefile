@@ -35,13 +35,13 @@ $(APP) :
 	tostool $< $@
 
 %.elf: $(LIBDIR)/libcmini.a $(OBJS)
-	$(CC) $(LIBDIR)/startup.o -o $@ $(OBJS) -Wl,-Map,mapfile $(CFLAGS) $(LIBS)
+	$(CC) $(LIBDIR)/crt0.o -o $@ $(OBJS) -Wl,-Map,mapfile $(CFLAGS) $(LIBS)
 
 else
 
 $(APP): $(LIBDIR)/libcmini.a $(OBJS)
 	$(Q)echo "CC $(@)"
-	$(Q)$(CC) $(LIBDIR)/startup.o -o $(APP) $(OBJS) $(CFLAGS) $(LIBS)
+	$(Q)$(CC) $(LIBDIR)/crt0.o -o $(APP) $(OBJS) $(CFLAGS) $(LIBS)
 	$(Q)m68k-atari-mint-strip $(APP)
 
 endif

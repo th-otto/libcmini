@@ -17,16 +17,16 @@ extern short _app;
 
 extern int main (int, char **, char **);
 
-static void _main (int _argc, char **_argv, char **_envp) {
-	if (_app)
-		(void)Pdomain(1);	/* set MiNT domain */
-		
+static void _main (int _argc, char **_argv, char **_envp)
+{
 	/* if stderr is not re-directed to a file, force 2 to console
 	 * (UNLESS we've been run from a shell we trust, i.e. one that supports
 	 *  the official ARGV scheme, in which case we leave stderr be).
 	 */
+#if 0
 	if(!*_argv[0] && isatty (2))
 		(void) Fforce(2, -1);
+#endif
 
 	exit(main(_argc, _argv, _envp));
 }
@@ -42,8 +42,10 @@ void _acc_main(void) {
 	if (_stksize < 0)
 		_stksize = -_stksize;
 
-//	if ((s = getenv("STACKSIZE")) != 0)
-//		_stksize = atoi(s);
+#if 0
+	if ((s = getenv("STACKSIZE")) != 0)
+		_stksize = atoi(s);
+#endif
 
 	/* stack on word boundary */
 	_stksize &= 0xfffffffeL;
@@ -54,6 +56,6 @@ void _acc_main(void) {
 	/* this is an accessory */
 	_app = 0;
 
-	_main(1L, acc_argv, acc_argv);
+	_main(1, acc_argv, acc_argv);
 	/*NOTREACHED*/
 }

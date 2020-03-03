@@ -52,9 +52,9 @@ static void _main (int _argc, char **_argv, char **_envp) {
 
 void _crtinit(void) {
 
-	register BASEPAGE *bp;
-	register long m;
-	register long freemem;
+	BASEPAGE *bp;
+	long m;
+	long freemem;
 
 	/* its an application */
 	_app = 1;

@@ -45,9 +45,9 @@ void _crtinit_noargs(void);
 void _crtinit_noargs(void) {
 	extern void etext(void);	/* a "function" to fake out pc-rel addressing */
 
-	register BASEPAGE *bp;
-	register long m;
-	register long freemem;
+	BASEPAGE *bp;
+	long m;
+	long freemem;
 
 	/* its an application */
 	_app = 1;
@@ -110,9 +110,6 @@ void _crtinit_noargs(void) {
 	/* not reached normally */
 
 notenough:
-	(void) Cconws("Fatal error: insufficient memory\r\n");
-	(void) Cconws("Hint: either decrease stack size using 'stack' command (not recomended)\r\n" \
-		   "      or increase TPA_INITIALMEM value in mint.cnf.\r\n");
 	Pterm(-1);
 }
 
