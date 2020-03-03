@@ -36,7 +36,6 @@ sources/ftell.c
 sources/fwrite.c
 sources/getenv.c
 sources/getopt.c
-sources/inistack.c
 sources/isatty.c
 sources/lib.h
 sources/ltoa.c

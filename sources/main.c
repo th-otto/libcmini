@@ -17,7 +17,6 @@ extern int main (int, char **, char **);
 static long parseargs(BASEPAGE *bp);
 
 extern long _stksize;
-extern long _initial_stack;
 
 /* globals */
 
