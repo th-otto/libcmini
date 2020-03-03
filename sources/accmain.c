@@ -33,7 +33,6 @@ static void _main (int _argc, char **_argv, char **_envp)
 
 
 void _acc_main(void) {
-	static char *acc_argv[] = { "", NULL }; /* no name and no arguments */
 	void *_heapbase;
 	
 	if (_stksize == 0 || _stksize == -1L)
@@ -56,6 +55,6 @@ void _acc_main(void) {
 	/* this is an accessory */
 	_app = 0;
 
-	_main(1, acc_argv, acc_argv);
+	_main(__libc_argc, __libc_argv, NULL);
 	/*NOTREACHED*/
 }
