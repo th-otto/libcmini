@@ -4,7 +4,7 @@
 
 #if defined(__MSHORT__) || defined(__PUREC__) || defined(__AHCC__)
 
-extern char const __atoi_numstr[];
+extern char const __itoa_numstr[16];
 
 char *ltoa(long value, char *buffer, int radix);
 
@@ -12,7 +12,7 @@ char *ltoa(long value, char *buffer, int radix)
 {
 	char *p;
 	int neg = 0;
-	char tmpbuf[12];
+	char tmpbuf[8 * sizeof(long) + 2];
 	short i = 0;
 
 	if (value < 0)
@@ -21,7 +21,7 @@ char *ltoa(long value, char *buffer, int radix)
 		value = -value;
 	}
 	do {
-		tmpbuf[i++] = __atoi_numstr[value % radix];
+		tmpbuf[i++] = __itoa_numstr[value % radix];
 	} while ((value /= radix) != 0);
 
 	if (neg)
