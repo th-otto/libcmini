@@ -54,4 +54,7 @@ char *dirname(char *path);
 char *strtok(char *s1, const char* s2);
 char *strtok_r(char *s, const char *delim, char **scanpoint);
 
+char *stpcpy(char *dest, const char *src);
+char *stpncpy(char *dest, const char *src, size_t n);
+
 #endif /* _STRING_H_ */
