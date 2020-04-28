@@ -1,8 +1,12 @@
 /*
- * memmove.c
+ * memcpy.c/memmove.c
  *
- *  Created on: 23.03.2014
+ *  Created on: 16.06.2013
+ *      Author: mfro
+ *  Rewritten on: 23.03.2014
  *      Author: ardi
+ *  Rewritten on: 28.04.2020
+ *      Author: tho
  */
 
 #include <stdlib.h>

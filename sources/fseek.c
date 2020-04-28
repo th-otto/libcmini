@@ -28,7 +28,7 @@ int fseek(FILE *fp, long offset, int origin)
 		return -1;
 	}
 	fp->__eof = 0;
-	fp->__pushed_back = 0;
+	fp->__pushback = EOF;
 	return 0;
 }
 

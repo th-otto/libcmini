@@ -1,5 +1,5 @@
 /*
- * snprintf.c
+ * vsnprintf.c
  *
  *  Created on: 29.05.2013
  *      Author: mfro

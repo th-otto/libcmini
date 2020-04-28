@@ -226,8 +226,7 @@ void qsort(void *base, size_t nel, size_t width, int (*compar)(const void *, con
 				while (--trav >= run_ptr)
 				{
 					char c = *trav;
-					char *hi,
-					*lo;
+					char *hi, *lo;
 
 					for (hi = lo = trav; (lo -= width) >= tmp_ptr; hi = lo)
 						*hi = *lo;

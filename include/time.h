@@ -1,6 +1,7 @@
 #ifndef _TIME_H_
 #define _TIME_H_
 
+#include <stddef.h>
 #include <stdio.h>
 #include <sys/types.h>
 
@@ -21,7 +22,7 @@ typedef __suseconds_t suseconds_t;
 #endif
 
 
-struct tm 
+struct tm
 {
 	int tm_sec;         /* seconds */
 	int tm_min;         /* minutes */
@@ -42,13 +43,19 @@ struct timeval
 
 struct timezone
 {
-	int tz_minuteswest;		/* minutes west of Greenwich */
-	int tz_dsttime;			/* type of DST correction */
+	int tz_minuteswest;		/* minutes west of GMT */
+	int tz_dsttime;			/* Nonzero if DST is ever in effect */
 };
 
+extern long timezone;
+extern char* tzname[2];
+
 time_t time(time_t *tloc);
+void tzset(void);
 clock_t clock(void);
 time_t mktime(struct tm *tm);
-size_t strftime(char *s, size_t smax, const char *fmt, const struct tm *tp);
+struct tm* gmtime(const time_t* timep);
+struct tm* localtime(const time_t* timep);
+size_t strftime(char* s, size_t smax, const char* fmt, const struct tm* tp);
 
 #endif /* _TIME_H_ */

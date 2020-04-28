@@ -15,10 +15,11 @@ int fgetc(FILE *stream)
 	unsigned char ch;
 	long rc;
 	
-	if (stream->__pushed_back)
+	if (stream->__pushback != EOF)
 	{
-		stream->__pushed_back = 0;
-		return stream->__pushback;
+		ch = stream->__pushback;
+		stream->__pushback = EOF;
+		return ch;
 	}
 	rc = Fread(FILE_GET_HANDLE(stream), 1, &ch);
 	if (rc == 0)

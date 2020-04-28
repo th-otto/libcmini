@@ -1,4 +1,5 @@
 #include <time.h>
+#include <string.h>
 #include <mint/osbind.h>
 #include <sys/time.h>
 
@@ -8,7 +9,6 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
 	unsigned short tos_date;
 	struct tm now;
 
-	(void)tzp;
 	tos_time = Tgettime();
 	tos_date = Tgetdate();
 
@@ -25,5 +25,13 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
 		tp->tv_sec = mktime(&now);
 		tp->tv_usec = 0;
 	}
+
+	if (tzp != NULL)
+	{
+		tzset();
+		tzp->tz_minuteswest = (int)(-timezone / 60);
+		tzp->tz_dsttime = strcmp(tzname[0], tzname[1]);
+	}
+
 	return 0;
 }

@@ -63,13 +63,13 @@ extern unsigned char const __libc_ctype2[];
 # define	iscntrl(c)	(((c) == -1) ? 0 : \
 	(unsigned char) (c) == 255 ? 1 : \
 	(__libc_ctype[(unsigned char)((c))]&_IScntrl))
-	
+
 #else /* GNU C */
 # define        iscntrl(c) \
   ({ int _c = (int) (c);   \
      _c == -1 ? 0 : \
      (unsigned char) (_c) == 255 ? 1 : __libc_ctype[(unsigned char)(_c)]&_IScntrl; })
-     
+
 #endif /* GNU C */
 
 #endif /* CTYPE_H_ */

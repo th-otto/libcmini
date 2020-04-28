@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mfro0/libcmini.svg?branch=master)](https://travis-ci.org/mfro0/libcmini)
+[![Build Status](https://travis-ci.org/freemint/libcmini.svg?branch=master)](https://travis-ci.org/freemint/libcmini)
 
 # libcmini
 
@@ -33,7 +33,7 @@ m68k-atari-mint-gcc -o hello.tos -s hello.c
 results in a binary size of 118220 bytes. Huge. The same thing compiled with libcmini:
 
 ```
-m68k-atari-mint-gcc -nostdlib $LIBCMINI/startup.o hello.c -o hello.tos -s -L$LIBCMINI -lcmini -lgcc
+m68k-atari-mint-gcc -nostdlib $LIBCMINI/crt0.o hello.c -o hello.tos -s -L$LIBCMINI -lcmini -lgcc
 ```
 (note that - since we compile with -nostdlib - you have to add the gcc runtime support library libgcc.a to your command line for the processors that need it)
 
@@ -41,13 +41,13 @@ creates a binary with 11794 byts. About a tenth of the size.
 
 ## Binary Releases Downloads
 
-binary releases (in tar.gz format) can be downloaded from here: https://github.com/mfro0/libcmini/releases
+binary releases (in tar.gz format) can be downloaded from here: https://github.com/freemint/libcmini/releases
 source is also available there.
 
 ## What's that libcmini.creator stuff about?
 
 I'm using the QtCreator IDE for my Atari cross development work (most of the time, if I'm not in vi mode). The `libcmini.config`, `libcmini.creator`, `libcmini.files` and `libcmini.includes` files are used by QtCreator to keep track of the project.
-If you are not using QtCreator (I would recommend it), just ignore these files.
+If you are not using QtCreator (I would recommend it since it adds a few nice features to Atari cross development), just ignore these files.
 
 ## Fastcall?
 (contributed by Frederik Olsson)
@@ -67,4 +67,6 @@ With -mfastcall libcmini itself is 3% smaller binary, and the tests/bench test e
 
 ## Contribution
 
-Contributors are always welcome. Please, make sure your editor preserves tabs to make diffs shorter and easier to compare.
+Contributions are always welcome.
+
+Please make sure you provide all new code using 'four spaces' indentation without TAB characters and trailing spaces removed.

@@ -31,8 +31,8 @@ extern char **__libc_argv;
 
 struct _mem_stream { char *xstring; char *xestring; };
 
-int __flshfp(FILE *stream, int c);
 int doprnt(int (*)(int, void *), void *stream, const char *fmt, va_list va);
+int doscan(int (*getchar_func)(void*), int (*ungetchar_func)(int, void*), void* stream, const char* fmt, va_list va);
 int __addchar(int c, void *stream);
 int unx2dos(const char *unx, char *dos);
 int dos2unx(const char *dos, char *unx);
@@ -40,6 +40,7 @@ unsigned long __strtoul_internal(const char *nptr, char **endptr, int base, int 
 unsigned long long __strtoull_internal(const char *nptr, char **endptr, int base, int *sign);
 void _acc_main(void);
 void _crtinit(void);
+void _crtinit_noargs(void);
 
 extern FILE *__stdio_head;
 

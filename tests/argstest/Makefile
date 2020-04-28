@@ -73,16 +73,16 @@ OBJDIRS=$(patsubst %,%/objs,$(TRGTDIRS))
 #
 # multilib flags. These must match m68k-atari-mint-gcc -print-multi-lib output
 #
-m68020-60/$(APP):CFLAGS += -m68020-60
-m5475/$(APP):CFLAGS += -mcpu=5475
-mshort/$(APP):CFLAGS += -mshort
+m68020-60/$(APP): CFLAGS += -m68020-60
+m5475/$(APP): CFLAGS += -mcpu=5475
+mshort/$(APP): CFLAGS += -mshort
 m68020-60/mshort/$(APP): CFLAGS += -m68020-60 -mshort
 m5475/mshort/$(APP): CFLAGS += -mcpu=5475 -mshort
 ifeq ($(BUILD_FAST), Y)
-	mfastcall/$(APP):CFLAGS += -mfastcall
-	m68020-60/mfastcall/$(APP):CFLAGS += -m68020-60 -mfastcall
-	mshort/mfastcall/$(APP):CFLAGS += -mshort -mfastcall
-	m68020-60/mshort/mfastcall/$(APP): CFLAGS += -m68020-60 -mshort -mfastcall
+mfastcall/$(APP): CFLAGS += -mfastcall
+m68020-60/mfastcall/$(APP): CFLAGS += -m68020-60 -mfastcall
+mshort/mfastcall/$(APP): CFLAGS += -mshort -mfastcall
+m68020-60/mshort/mfastcall/$(APP): CFLAGS += -m68020-60 -mshort -mfastcall
 endif
 
 all: dirs $(patsubst %,%/$(APP),$(TRGTDIRS))

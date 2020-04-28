@@ -8,12 +8,13 @@
     understand and accept it fully.
 */
 
-#include "string.h"
+#include <string.h>
 
-size_t strnlen(const char* s, size_t max)
+size_t
+strnlen (const char* s, size_t max)
 {
-	const char* e = memchr(s, '\0', max);
-	if (e != NULL)
-		return e - s;
-	return max;
+  const char* e = memchr (s, '\0', max);
+  if (e != NULL)
+    return e - s;
+  return max;
 }

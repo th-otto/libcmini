@@ -12,19 +12,31 @@
 #include <stdarg.h>
 #include <mint/osbind.h>
 
+/* The mode of I/O, as given in the MODE argument to fopen, etc.  */
+typedef struct
+{
+  unsigned int __read:1;    /* Open for reading.  */
+  unsigned int __write:1;   /* Open for writing.  */
+  unsigned int __append:1;  /* Open for appending.  */
+  unsigned int __binary:1;  /* Opened binary.  */
+  unsigned int __create:1;  /* Create the file.  */
+  unsigned int __exclusive:1;   /* Error if it already exists.  */
+  unsigned int __truncate:1;    /* Truncate the file on opening.  */
+} __io_mode;
+
 typedef struct __stdio_file FILE;
-typedef struct __stdio_file
+struct __stdio_file
 {
     long __magic;
 #define	_IOMAGIC (0xfedabeecL)	/* Magic number to fill `__magic'.  */
 
     void *__cookie;			/* Magic cookie. Holds GEMDOS handle */
-	unsigned char __pushback;
+	int __pushback;
     FILE *__next;     		/* Next FILE in the linked list.  */
-    unsigned int __pushed_back:1;
+	__io_mode __mode;     /* File access mode.  */
 	unsigned int __eof:1;
 	unsigned int __error:1;
-} FILE;
+};
 
 extern FILE *stdout;
 extern FILE *stdin;
@@ -60,52 +72,64 @@ extern FILE *stderr;
 
 extern int errno;
 
-extern FILE *fopen(const char *path, const char *mode);
-extern int fclose(FILE *fp);
-extern int fcloseall(void);
-extern size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-extern size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-extern int fseek(FILE *fp, long offset, int origin);
-extern long ftell(FILE *stream);
+FILE *fopen(const char *path, const char *mode);
 FILE *freopen(const char *path, const char *mode, FILE *stream);
-
-
-int setvbuf(FILE *stream, char *buf, int mode, size_t size);
-int fflush(FILE *stream);
-int ferror (FILE *__stream);
-int feof (FILE *__stream);
-void clearerr(FILE *stream);
-
-
-extern int fputs(const char *s, FILE *stream);
-extern int puts(const char *s);
-extern int fputc(int c, FILE *stream);
-extern int putc(int c, FILE *stream);
+FILE *fdopen(int fd, const char *mode);
+int fclose(FILE *fp);
+int fcloseall(void);
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+int fseek(FILE *fp, long offset, int origin);
+long ftell(FILE *stream);
 void rewind(FILE *stream);
 
-extern int scanf(const char *format, ...);
-extern int sscanf(const char *ibuf, const char *fmt, ...);
-extern int fscanf(FILE *stream, const char *format, ...);
-extern int fgetc(FILE *stream);
-extern int putchar(int c);
-extern int fprintf(FILE *stream, const char *format, ...);
-extern int vfprintf(FILE *stream, const char *format, va_list ap);
+int setvbuf(FILE *stream, char *buf, int mode, size_t size);
+
+int fputs(const char *s, FILE *stream);
+int puts(const char *s);
+int fputc(int c, FILE *stream);
+int putc(int c, FILE *stream);
+int putchar(int c);
+int puts(const char *s);
+
+int fgetc(FILE *stream);
+char* fgets(char *s, int n, FILE *stream);
+int getc(FILE *stream);
+/* No gets() anymore! */
+#define getchar()  fgetc(stdin)
 int ungetc(int c, FILE *stream);
 
-extern int printf(const char *fmt, ...);
-extern int snprintf(char *s, size_t size, const char *fmt, ...);
-extern int vsnprintf(char *str, size_t size, const char *fmt, va_list va);
-extern int sprintf(char *s, const char *format, ...);
-extern int vsprintf(char *s, const char *format, va_list va);
+int scanf(const char *format, ...);
+int fscanf(FILE *stream, const char *format, ...);
+int sscanf(const char *str, const char *format, ...);
+int vscanf(const char *format, va_list list);
+int vfscanf(FILE* fp, const char *format, va_list list);
+int vsscanf(const char* str, const char *format, va_list list);
 
-extern int puts(const char *s);
+int fprintf(FILE *stream, const char *format, ...);
+int vfprintf(FILE *stream, const char *format, va_list ap);
+int printf(const char *fmt, ...);
+int vprintf(const char *fmt, va_list ap);
+int snprintf(char *s, size_t size, const char *fmt, ...);
+int vsnprintf(char *str, size_t size, const char *fmt, va_list va);
+int sprintf(char *s, const char *format, ...);
+int vsprintf(char *s, const char *format, va_list va);
+int asprintf(char** strp, const char* format, ...);
+int vasprintf(char** strp, const char* format, va_list ap);
 
-extern int open(const char *filename, int access, ...);
-extern int close(int fd);
-extern int unlink(const char *filename);
-int rename(const char *oldname, const char *newname);
+int fflush(FILE *stream);
+int feof(FILE *stream);
+int ferror(FILE *stream);
+void clearerr(FILE *stream);
+int fileno(FILE *stream);
+
+int open(const char *filename, int access, ...);
+int close(int fd);
+int unlink(const char *filename);
+
 int remove(const char *filename);
+int rename(const char *oldname, const char *newname);
 
-static inline int fileno(FILE *stream) { return (int)(long)stream->__cookie; }
+#define fileno(stream) ((int)(long)stream->__cookie)
 
 #endif /* STDIO_H_ */

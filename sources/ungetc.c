@@ -24,15 +24,14 @@ int ungetc(int c, FILE *stream)
 {
 	if (c == EOF)
 		return EOF;
-	if (stream->__pushed_back)
+	if (stream->__pushback != EOF)
 		/* There is already a char pushed back.  */
 		return EOF;
 
+	stream->__pushback = c;
+	
 	/* We just gave it another character to read, so it's not at EOF.  */
 	stream->__eof = 0;
-	
-	stream->__pushed_back = 1;
-	stream->__pushback = c;
 	
 	return stream->__pushback;
 }

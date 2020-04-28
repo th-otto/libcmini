@@ -13,7 +13,6 @@
 #include "lib.h"
 
 extern long _stksize;
-extern short _app;
 
 extern int main (int, char **, char **);
 

@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <mint/osbind.h>
-#include "lib.h"
+#include <stdio.h>
 
 int putchar(int c)
 {

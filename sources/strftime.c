@@ -38,6 +38,8 @@ size_t strftime(char *s, size_t smax, const char *fmt, const struct tm *tp)
 	char *ptr = s;
 	size_t count = 0;
 
+	tzset();
+
 	do
 	{
 		if (*fmt == '%')
@@ -50,25 +52,39 @@ size_t strftime(char *s, size_t smax, const char *fmt, const struct tm *tp)
 			switch (*++fmt)
 			{
 			case 'a':
-				addlen = 3;				/* abbrevation = first three characters */
+				addlen = 3; /* abbrevation = first three characters */
 
 				/* FALLTHROUGH */
 
 			case 'A':
-				addstr = wday_name[tp->tm_wday];
+				if (tp->tm_wday < 0 || tp->tm_wday > 6)
+				{
+					addstr = "?";
+					addlen = -1;
+				} else 
+				{
+					addstr = wday_name[tp->tm_wday];
+				}
 				break;
 
 			case 'b':
-				addlen = 3;				/* abbrevation = first three characters */
+				addlen = 3; /* abbrevation = first three characters */
 
 				/* FALLTHROUGH */
 
 			case 'B':
-				addstr = mon_name[tp->tm_mon];
+				if (tp->tm_mon < 0 || tp->tm_mon > 11)
+				{
+					addstr = "?";
+					addlen = -1;
+				} else
+				{
+					addstr = mon_name[tp->tm_mon];
+				}
 				break;
 
 			case 'c':
-				strftime(addval, 80, "%a %b %d %x %Y", tp);
+				strftime(addval, sizeof(addval), "%a %b %d %x %Y", tp);
 				break;
 
 			case 'd':
@@ -170,7 +186,7 @@ size_t strftime(char *s, size_t smax, const char *fmt, const struct tm *tp)
 				break;
 
 			case 'Z':
-				addstr = "";
+				addstr = tzname[tp->tm_isdst > 0];
 				break;
 
 			case '%':

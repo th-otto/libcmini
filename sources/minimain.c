@@ -40,7 +40,6 @@ static void _main (int _argc, char **_argv, char **_envp) {
 	exit(main(_argc, _argv, _envp));
 }
 
-void _crtinit_noargs(void);
 void _crtinit_noargs(void) {
 	extern void etext(void);	/* a "function" to fake out pc-rel addressing */
 

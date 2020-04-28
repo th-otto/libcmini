@@ -8,7 +8,7 @@ char *strrchr(const char *s, int c)
 	{
 		if (*cp == (char) c)
 			return (char*)cp;
-	} while (cp-- > s);
+	} while (--cp >= s);
 
 	return NULL;
 }
