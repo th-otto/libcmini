@@ -1,5 +1,9 @@
 #include <stdlib.h>
 #include <mint/osbind.h>
+#include <sys/types.h>
+#ifndef	_BITS_TYPES_H
+#define	_BITS_TYPES_H	1
+#endif
 #include <sys/stat.h>
 
 int stat(const char *path, struct stat *buff)
