@@ -31,4 +31,3 @@ int fseek(FILE *fp, long offset, int origin)
 	fp->__pushback = EOF;
 	return 0;
 }
-

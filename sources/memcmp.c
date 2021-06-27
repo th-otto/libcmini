@@ -1,5 +1,5 @@
 /*
- * strncmp.c
+ * memcmp.c
  *
  *  Created on: 29.05.2013
  *      Author: mfro
@@ -25,5 +25,3 @@ int memcmp(const void *s1, const void *s2, size_t size)
 	
 	return 0;
 }
-
-
