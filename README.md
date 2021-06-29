@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/freemint/libcmini.svg?branch=master)](https://travis-ci.org/freemint/libcmini)
 
+- FreeMiNT and XaAES [ ![Download](download.svg?width=200) ](https://tho-otto.de/snapshots/freemint/bootable/) - bootable, preconfigured and maintained FreeMiNT/XaAES archives for the ST, 020+ machines, ARAnyM and the FireBee
+
 # libcmini
 
 libcmini aims to be a small-footprint C library for the m68k-atari-mint (cross) toolchain, similar to the C library
